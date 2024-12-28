@@ -1,0 +1,33 @@
+header {
+  border-bottom: 1px solid #e1e1e1;
+}
+.header-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  max-width: 1300px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.nav-list {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+.nav-list a {
+  color: var(--primary-text);
+  font-weight: 500;
+}
+
+.nav-list a:hover {
+  color: var(--primary-color);
+}
