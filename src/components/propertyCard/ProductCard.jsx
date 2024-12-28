@@ -27,7 +27,7 @@ const ProductCard = ({ data }) => {
           <span>{data.location}</span>
         </div>
         <div className={styles.price}>
-          <p>${data.price}</p>
+          <p>{data.price} RLC</p>
           <Button label="Connect" btnClass="primary" />
         </div>
       </div>
