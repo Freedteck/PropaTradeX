@@ -2,6 +2,7 @@ import { BedDouble, MapPin } from "lucide-react";
 import styles from "./ProductCard.module.css";
 import Button from "../button/Button";
 import bgImage from "../../assets/image.png";
+import PropTypes from "prop-types";
 
 const ProductCard = ({ data }) => {
   return (
@@ -32,6 +33,16 @@ const ProductCard = ({ data }) => {
       </div>
     </li>
   );
+};
+
+ProductCard.propTypes = {
+  data: PropTypes.shape({
+    title: PropTypes.string,
+    description: PropTypes.string,
+    rooms: PropTypes.number,
+    location: PropTypes.string,
+    price: PropTypes.number,
+  }),
 };
 
 export default ProductCard;
