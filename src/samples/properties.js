@@ -7,6 +7,7 @@ export const properties = [
     rooms: 4,
     location: "San Francisco, California",
     price: 100,
+    type: "sale",
   },
   {
     id: 2,
@@ -16,6 +17,7 @@ export const properties = [
     rooms: 3,
     location: "Denver, Colorado",
     price: 120,
+    type: "rent",
   },
   {
     id: 3,
@@ -25,6 +27,7 @@ export const properties = [
     rooms: 2,
     location: "New York City, New York",
     price: 150,
+    type: "sale",
   },
   {
     id: 4,
@@ -34,6 +37,7 @@ export const properties = [
     rooms: 5,
     location: "Lake Tahoe, California",
     price: 200,
+    type: "rent",
   },
   {
     id: 5,
@@ -43,6 +47,7 @@ export const properties = [
     rooms: 4,
     location: "Phoenix, Arizona",
     price: 180,
+    type: "sale",
   },
   {
     id: 6,
@@ -52,6 +57,7 @@ export const properties = [
     rooms: 3,
     location: "Nashville, Tennessee",
     price: 90,
+    type: "rent",
   },
   {
     id: 7,
@@ -61,6 +67,7 @@ export const properties = [
     rooms: 6,
     location: "Miami, Florida",
     price: 250,
+    type: "sale",
   },
   {
     id: 8,
@@ -70,6 +77,7 @@ export const properties = [
     rooms: 8,
     location: "Charleston, South Carolina",
     price: 300,
+    type: "sale",
   },
   {
     id: 9,
@@ -79,6 +87,7 @@ export const properties = [
     rooms: 4,
     location: "Chicago, Illinois",
     price: 400,
+    type: "rent",
   },
   {
     id: 10,
@@ -88,6 +97,7 @@ export const properties = [
     rooms: 2,
     location: "Honolulu, Hawaii",
     price: 150,
+    type: "sale",
   },
   {
     id: 11,
@@ -97,6 +107,7 @@ export const properties = [
     rooms: 3,
     location: "Austin, Texas",
     price: 110,
+    type: "rent",
   },
   {
     id: 12,
@@ -106,5 +117,6 @@ export const properties = [
     rooms: 5,
     location: "Aspen, Colorado",
     price: 220,
+    type: "rent",
   },
 ];
