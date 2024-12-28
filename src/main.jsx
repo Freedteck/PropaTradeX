@@ -9,6 +9,10 @@ import { config } from "./wagmi.ts";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/home/Home.jsx";
+import Explore from "./routes/explore/Explore.jsx";
+import Rent from "./routes/rent/Rent.jsx";
+import Buy from "./routes/buy/Buy.jsx";
+import Manage from "./routes/manage/Manage.jsx";
 
 globalThis.Buffer = Buffer;
 
@@ -22,6 +26,22 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "explore",
+        element: <Explore />,
+      },
+      {
+        path: "rent",
+        element: <Rent />,
+      },
+      {
+        path: "buy",
+        element: <Buy />,
+      },
+      {
+        path: "manage",
+        element: <Manage />,
       },
     ],
   },
