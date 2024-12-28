@@ -1,0 +1,19 @@
+footer {
+  border-top: 1px solid #eaeaea;
+  padding-block: 4rem;
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1300px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: 700;
+}
