@@ -1,6 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styles from "./Header.module.css";
-import Button from "../button/Button";
 import { ConnectKitButton } from "connectkit";
 import { useAccount } from "wagmi";
 
@@ -9,20 +8,42 @@ const Header = () => {
   return (
     <header>
       <nav className={styles["header-nav"]}>
-        <h1 className={styles.logo}>PropaTradeX</h1>
+        <Link to={"/"} className={styles.logo}>
+          PropaTradeX
+        </Link>
         {isConnected && (
           <ul className={styles["nav-list"]}>
             <li>
-              <NavLink to={"explore"}>Explore</NavLink>
+              <NavLink
+                to={"explore"}
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                Explore
+              </NavLink>
             </li>
             <li>
-              <NavLink to={"rent"}>Rent</NavLink>
+              <NavLink
+                to={"rent"}
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                Rent
+              </NavLink>
             </li>
             <li>
-              <NavLink to={"buy"}>Buy</NavLink>
+              <NavLink
+                to={"buy"}
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                Buy
+              </NavLink>
             </li>
             <li>
-              <NavLink to={"manage"}>Manage</NavLink>
+              <NavLink
+                to={"manage"}
+                className={({ isActive }) => (isActive ? styles.active : "")}
+              >
+                Manage
+              </NavLink>
             </li>
           </ul>
         )}
