@@ -1,7 +1,8 @@
-import { useState } from "react";
+import Hero from "../../components/hero/Hero";
+import PropertyList from "../../components/propertyList/PropertyList";
 import { properties } from "../../samples/properties";
-import bgImage from "../../assets/image.png";
-
+import "../../styles/demo.css";
+import { useState } from "react";
 const Rent = () => {
   const [filter, setFilter] = useState({
     location: "",
@@ -18,48 +19,53 @@ const Rent = () => {
       (filter.location === "" ||
         property.location.toLowerCase().includes(filter.location.toLowerCase())) &&
       (filter.priceRange === "" ||
-        (filter.priceRange === "low" && (property.price) < 200) ||
-        (filter.priceRange === "high" && (property.price) >= 200)) &&
+        (filter.priceRange === "low" && property.price < 1) ||
+        (filter.priceRange === "high" && property.price >= 1)) &&
       (filter.rooms === "" || property.rooms === parseInt(filter.rooms))
     );
   });
+
+  
   return (
     <div className="rent-container">
-      <h1 className="rent-title">Find Your Perfect Rental Home Today</h1>
-      <p className="rent-description">
-        Browse thousands of properties available for rent at your fingertips
-      </p>
-
-      <div className="filters">
-        <input type="text" name="location" placeholder="Enter location" value={filter.location} onChange={handleFilterChange} />
-        <select name="price-range" value={filter.priceRange} onChange={handleFilterChange}>
-          <option value="">Select Price Range</option>
-          <option value="low">Below $200</option>
-          <option value="high">Above $200</option>
-
-        </select>
-        <select name="rooms" value={filter.rooms} onChange={handleFilterChange}>
-          <option value="">Select Bedrooms</option>
-          <option value="1">1 Bedroom</option>
-          <option value="2">2 Bedrooms</option>
-          <option value="3">3 Bedrooms</option>
-          <option value="4">4+ Bedrooms</option>
-        </select>
+      <div className="rent-hero">
+        <h1 className="rent-title">Find Your Ideal Rental Property</h1>
+        <p className="rent-description">
+          Explore a curated selection of rental properties tailored to your
+          lifestyle. Whether you're looking for a cozy apartment, a spacious
+          house, or a unique space, we make finding your perfect home simple and
+          secure. Start your journey to secure and comfortable living today.
+        </p>
+        <div className="filters-container">
+          <input type="text" name="location" placeholder="Enter location"  value={filter.location} onChange={handleFilterChange} />
+          <select name="priceRange" value={filter.priceRange} onChange={handleFilterChange}>
+            <option value="">Select Price Range</option>
+            <option value="low">Below 1 RLC</option>
+            <option value="high">Above 1 RLC</option>
+          </select>
+          <select
+            name="rooms"
+            value={filter.rooms}
+            onChange={handleFilterChange}
+          >
+            <option value="">Select Bedrooms</option>
+            <option value="1">1 Bedroom</option>
+            <option value="2">2 Bedrooms</option>
+            <option value="3">3 Bedrooms</option>
+            <option value="4">4+ Bedrooms</option>
+          </select>
+        </div>
       </div>
-      <div className="filtered-properties"> 
-        {filteredProperties.map((property) => (
-          <div key={property.id} className="property-card">
-            <img src={bgImage} alt="property-image" />
-            <div className="property-details">
-              <h3 className="property-title">{property.title}</h3>
-              <p className="property-location">{property.location}</p>
-              <p className="property-price">${property.price}</p>
-              <p className="property-bedroom">{property.rooms}</p>
-              <button className="view-details-btn">View Details</button>
 
-            </div>
-          </div>
-        ))}
+      <div>
+        <PropertyList
+          showViewAll={false}
+          properties={filteredProperties}
+          heading={"Discover a World of Possibilities"}
+          desc={
+            "Our portfolio of properties is as diverse as your dreams. Explore the following categories to find the perfect property that resonates with your vision of home"
+          }
+        />
       </div>
     </div>
   );
