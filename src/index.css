@@ -29,16 +29,6 @@ body {
   background-color: var(--primary-bg);
 }
 
-select,
-input {
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
-  padding: 10px 15px;
-  border: 1px solid var(--secondary-text);
-  border-radius: 12px;
-}
-
 /* Theming */
 
 /* @media (prefers-color-scheme: light) {
