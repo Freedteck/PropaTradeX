@@ -3,8 +3,10 @@ import { properties } from "../../samples/properties";
 import PropertyList from "../../components/propertyList/PropertyList";
 import styles from "./Home.module.css";
 import Button from "../../components/button/Button";
+import { useAccount } from "wagmi";
 
 const Home = () => {
+  const { isConnected } = useAccount();
   const propertiesForRent = properties.filter(
     (property) => property.type === "rent"
   );
@@ -21,15 +23,17 @@ const Home = () => {
           feature={"new"}
         />
       </div>
-      <div className={styles.rent}>
-        <PropertyList
-          properties={propertiesForRent.slice(0, 4)}
-          heading={"For Rent"}
-          desc={
-            "Discover the latest properties available for rent in various locations."
-          }
-        />
-      </div>
+      {isConnected && (
+        <div className={styles.rent}>
+          <PropertyList
+            properties={propertiesForRent.slice(0, 4)}
+            heading={"For Rent"}
+            desc={
+              "Discover the latest properties available for rent in various locations."
+            }
+          />
+        </div>
+      )}
       <section className={styles.cta}>
         <div>
           <h2>Find Your Next Home or Investment Today</h2>
