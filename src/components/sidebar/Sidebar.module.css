@@ -1,0 +1,24 @@
+.sidebar {
+  width: 200px;
+  position: sticky;
+  top: 0;
+  border-right: 1px solid #e0e0e0;
+}
+
+.sidebar ul {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.sidebar ul a {
+  padding: 1rem;
+}
+
+.sidebar ul a:hover {
+  background-color: var(--secondary-bg);
+}
+
+.sidebar ul a.active {
+  background-color: var(--secondary-bg);
+}

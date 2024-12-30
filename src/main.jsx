@@ -14,6 +14,7 @@ import Rent from "./routes/rent/Rent.jsx";
 import Buy from "./routes/buy/Buy.jsx";
 import Manage from "./routes/manage/Manage.jsx";
 import { ConnectKitProvider } from "connectkit";
+import Overview from "./routes/manage/pages/overview/Overview.jsx";
 
 globalThis.Buffer = Buffer;
 
@@ -43,6 +44,12 @@ const router = createBrowserRouter([
       {
         path: "manage",
         element: <Manage />,
+        children: [
+          {
+            index: true,
+            element: <Overview />,
+          },
+        ],
       },
     ],
   },
