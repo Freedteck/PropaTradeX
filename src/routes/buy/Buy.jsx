@@ -1,8 +1,24 @@
+import Hero from "../../components/hero/Hero";
+import ProductCard from "../../components/propertyCard/ProductCard";
+import { properties } from "../../samples/properties";
+import styles from "./Buy.module.css";
+
 const Buy = () => {
+    const BuyableProperties = properties.filter(property => property.type === 'sale')
   return (
-    <div>
-      <h1>Buy Works</h1>
-    </div>
+      <>
+        <Hero />
+        <div className={styles.container}>
+            {
+                BuyableProperties.map((property) => {
+                    return(
+                    <ProductCard key={property.id} data={property} />
+                    )
+                })
+            }
+        </div>
+
+      </>
   );
 };
 
