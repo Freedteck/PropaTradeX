@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Link, Outlet } from "react-router-dom";
 import Hero from "../../../../components/hero/Hero";
 import styles from "./Overview.module.css";
 import Button from "../../../../components/button/Button";
@@ -35,7 +35,10 @@ const Overview = () => {
             </NavLink>
           </li>
         </ul>
-        <Button label="New Property" btnClass="primary" />
+        <Link to="/manage/properties/new-property">
+          <Button label="New Property" btnClass="primary" />
+        </Link>
+        
       </nav>
       <div className={styles.content}>
         <Outlet />

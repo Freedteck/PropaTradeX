@@ -14,6 +14,8 @@ import Manage from "./routes/manage/Manage.jsx";
 import { ConnectKitProvider } from "connectkit";
 import Overview from "./routes/manage/pages/overview/Overview.jsx";
 import Properties from "./routes/manage/pages/overview/pages/Properties.jsx";
+import NewProperty from "./routes/manage/pages/overview/pages/NewProperty.jsx";
+
 
 globalThis.Buffer = Buffer;
 
@@ -57,6 +59,11 @@ const router = createBrowserRouter([
                 path: "purchase",
                 index: true,
                 element: <Properties propertyType={"purchase"} />,
+              },
+              {
+                path: "new-property",
+                index: true,
+                element: <NewProperty propertyType={"new-property"}/>
               },
             ],
           },
