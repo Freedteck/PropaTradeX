@@ -10,7 +10,6 @@ const Buy = () => {
         <Hero />
 
         <div className={styles.controls}>
-
           <select>
             <option value="">Property Type</option>
             <option value="2">2 Bedrooms</option>
@@ -34,17 +33,13 @@ const Buy = () => {
             <option key={property.id} value={property.price}>{property.price} RLC</option>
             )})}
           </select>
-
         </div>
 
         <div className={styles.container}>
-            {
-                buyableProperties.map((property) => {
-                    return(
-                    <ProductCard key={property.id} data={property} />
-                    )
-                })
-            }
+          {buyableProperties.map((property) => {
+          return(
+          <ProductCard key={property.id} data={property} />
+          )})}
         </div>
 
       </>
