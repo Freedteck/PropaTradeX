@@ -2,7 +2,7 @@
   background-color: var(--secondary-bg);
   padding: 4rem 1rem 0;
   position: relative;
-  background-image: url("../../assets/hero.jpg");
+  /* background-image: url("../../assets/hero.jpg"); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -32,7 +32,7 @@
   line-height: 1.5;
 }
 
-.controls {
+/* .controls {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -59,4 +59,22 @@
   border: none;
   background-color: transparent;
   outline: none;
+} */
+
+.profile {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  position: absolute;
+  bottom: -4rem;
+}
+
+.profileImage {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 5px solid var(--primary-bg);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+  background-color: var(--secondary-bg);
 }

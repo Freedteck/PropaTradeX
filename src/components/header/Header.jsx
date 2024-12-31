@@ -39,7 +39,7 @@ const Header = () => {
             </li>
             <li>
               <NavLink
-                to={"manage"}
+                to={"manage/properties"}
                 className={({ isActive }) => (isActive ? styles.active : "")}
               >
                 Manage

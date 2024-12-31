@@ -1,0 +1,32 @@
+.nav {
+  padding-top: 6rem;
+  /* padding-bottom: 0.2rem; */
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav ul {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav ul a {
+  color: var(--primary-text);
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.nav ul a:hover {
+  color: var(--primary-color);
+}
+
+.nav ul a.active {
+  color: var(--primary-color);
+}
+
+.content {
+  padding-block: 2rem;
+}

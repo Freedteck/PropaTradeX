@@ -6,7 +6,7 @@ const Manage = () => {
   return (
     <div className={styles.manage}>
       <Sidebar />
-      <main>
+      <main className={styles.main}>
         <Outlet />
       </main>
     </div>

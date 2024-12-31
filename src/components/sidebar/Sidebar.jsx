@@ -8,8 +8,7 @@ const Sidebar = () => {
       <ul>
         <li>
           <NavLink
-            to={"/manage"}
-            end
+            to={"/manage/properties"}
             className={({ isActive }) => (isActive ? styles.active : "")}
           >
             <LayoutDashboard size={24} />

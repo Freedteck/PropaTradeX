@@ -1,0 +1,15 @@
+.properties {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  background-color: var(--secondary-bg);
+  padding: 2rem;
+  border-radius: 12px;
+}
+
+.container {
+  margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
