@@ -1,0 +1,35 @@
+.sidebar {
+  width: 200px;
+  position: sticky;
+  top: 0;
+  border-right: 1px solid #e0e0e0;
+  padding-block: 1rem;
+}
+
+.sidebar ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-right: 0.5rem;
+}
+
+.sidebar ul a {
+  padding: 0.6rem 1rem;
+  display: block;
+  color: var(--primary-text);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.sidebar ul a:hover {
+  background-color: var(--secondary-bg);
+}
+
+.sidebar ul a.active {
+  background-color: var(--secondary-bg);
+  color: var(--primary-color);
+}
