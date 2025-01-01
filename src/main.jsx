@@ -15,6 +15,7 @@ import { ConnectKitProvider } from "connectkit";
 import Overview from "./routes/manage/pages/overview/Overview.jsx";
 import Properties from "./routes/manage/pages/overview/pages/Properties.jsx";
 import NewProperty from "./routes/manage/pages/overview/pages/newProperty/NewProperty.jsx";
+import Property from "./routes/property/Property.jsx";
 
 globalThis.Buffer = Buffer;
 
@@ -34,8 +35,13 @@ const router = createBrowserRouter([
         element: <Explore />,
       },
       {
+        path: "property",
+        index: true,
+        element: <Property />,
+      },
+      {
         path: "manage",
-        element: <Manage />,
+        lement: <Manage />,
         children: [
           {
             index: true,
