@@ -41,7 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: "manage",
-        lement: <Manage />,
+        element: <Manage />,
         children: [
           {
             index: true,

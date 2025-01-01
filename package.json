@@ -13,6 +13,7 @@
     "@iexec/dataprotector": "^2.0.0-beta.10",
     "@tanstack/react-query": "^5.62.11",
     "connectkit": "^1.8.2",
+    "graphql": "^16.10.0",
     "lucide-react": "^0.469.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",

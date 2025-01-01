@@ -1,25 +1,33 @@
-import {
-  createArrayBufferFromFile,
-  OneProtectDataStatus,
-} from "@iexec/dataprotector";
+import { createArrayBufferFromFile } from "@iexec/dataprotector";
 import { getDataProtectorClient } from "../clients/dataProtectorClient";
 
-type CreateProtectedDataStatusUpdateFn = (params: {
-  title: string;
-  isDone: boolean;
-  payload?: Record<string, string>;
-}) => void;
-
 export async function createProtectedData({
-  file,
+  thumbnail,
+  video,
+  propertyDoc,
+  receipt,
+  details,
   onStatusUpdate,
-}: {
-  file: File;
-  onStatusUpdate: CreateProtectedDataStatusUpdateFn;
 }) {
   const { dataProtectorCore } = await getDataProtectorClient();
 
-  const fileAsArrayBuffer = await createArrayBufferFromFile(file);
+  const thumbnailAsArrayBuffer = await createArrayBufferFromFile(thumbnail);
+  const videoAsArrayBuffer = await createArrayBufferFromFile(video);
+  const propertyDocAsArrayBuffer = await createArrayBufferFromFile(propertyDoc);
+  const receiptAsArrayBuffer = await createArrayBufferFromFile(receipt);
+
+  const reduceArray = (array) =>
+    array.reduce((accumulator, current, i) => {
+      accumulator[i] = current;
+      return accumulator;
+    }, {});
+
+  const filesArray = [
+    thumbnailAsArrayBuffer,
+    videoAsArrayBuffer,
+    propertyDocAsArrayBuffer,
+    receiptAsArrayBuffer,
+  ];
 
   onStatusUpdate({
     title: "Create protected data into DataProtector registry smart-contract",
@@ -27,23 +35,19 @@ export async function createProtectedData({
   });
 
   return dataProtectorCore.protectData({
-    data: { file: fileAsArrayBuffer },
-    name: file.name,
+    data: { files: reduceArray(filesArray), dataDetails: details },
+    name: details.title,
     onStatusUpdate: (status) => {
       keepInterestingStatusUpdates(onStatusUpdate, status);
     },
   });
 }
 
-function keepInterestingStatusUpdates(
-  onStatusUpdate: CreateProtectedDataStatusUpdateFn,
-  status: OneProtectDataStatus
-) {
+function keepInterestingStatusUpdates(onStatusUpdate, status) {
   if (status.title === "DEPLOY_PROTECTED_DATA" && status.isDone === true) {
     onStatusUpdate({
       title: "Create protected data into DataProtector registry smart-contract",
       isDone: true,
-      // payload: status.payload,
     });
 
     onStatusUpdate({

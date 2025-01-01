@@ -1,126 +1,230 @@
 import React, { useState } from "react";
 import styles from "./NewProperty.module.css";
+import Upload from "../../../../../../components/upload/Upload";
+import { createProtectedData } from "../../../../../../modules/createProtectedData";
+import { getOrCreateCollection } from "../../../../../../modules/getOrCreateCollection";
+import { getDataProtectorClient } from "../../../../../../clients/dataProtectorClient";
+// import { WorkflowError } from "@iexec/dataprotector";
 import Button from "../../../../../../components/button/Button";
-import { UploadCloud } from "lucide-react";
+
+// const FILE_SIZE_LIMIT_IN_KB = 500;
+const FILE_SIZE_LIMIT_IN_KB = 10_000;
 
 function NewProperty({ onSubmit }) {
-  const [property, setProperty] = useState({
-    thumbnail: null,
-    document: null,
-    receipt: null,
-    video: null,
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [location, setLocation] = useState("");
+  const [bedrooms, setBedrooms] = useState(1);
+  const [thumbnail, setThumbnail] = useState(null);
+  const [document, setDocument] = useState(null);
+  const [receipt, setReceipt] = useState(null);
+  const [video, setVideo] = useState(null);
+  const [status, setStatus] = useState({
+    title: "",
+    isDone: false,
+    payload: null,
   });
+  const [createdProtectedDataAddress, setCreatedProtectedDataAddress] =
+    useState("");
+  const [addToCollectionError, setAddToCollectionError] = useState();
+  const [addToCollectionSuccess, setAddToCollectionSuccess] = useState(false);
 
-  const handleFileUpload = (e, field) => {
+  const handleStatusUpdate = (status) => {
+    setStatus(status);
+  };
+
+  const getData = async () => {
+    const { dataProtectorSharing } = await getDataProtectorClient();
+    const { protectedDataInCollection } =
+      await dataProtectorSharing.getProtectedDataInCollections();
+
+    console.log("Protected data in collection", protectedDataInCollection);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case "title":
+        setTitle(value);
+        break;
+      case "description":
+        setDescription(value);
+        break;
+      case "location":
+        setLocation(value);
+        break;
+      case "bedrooms":
+        setBedrooms(value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleFileUpload = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      setProperty((prev) => ({
-        ...prev,
-        [field]: { name: file.name, type: file.type, content: reader.result },
-      }));
-    };
-    reader.readAsDataURL(file);
+    const { name } = e.target;
+
+    console.log("File uploaded", name);
+
+    if (!file) return;
+
+    switch (name) {
+      case "thumbnail":
+        setThumbnail(file);
+        break;
+      case "document":
+        setDocument(file);
+        break;
+      case "receipt":
+        setReceipt(file);
+        break;
+      case "video":
+        setVideo(file);
+        break;
+      default:
+        break;
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Property Details:", property);
-    alert("Property details uploaded successfully!");
-    if (onSubmit) onSubmit(property);
+    if (
+      !title ||
+      !description ||
+      !location ||
+      !bedrooms ||
+      !thumbnail ||
+      !document ||
+      !receipt ||
+      !video
+    ) {
+      console.log("Missing required fields");
+
+      return;
+    }
+
+    // Check file sizes for each file
+    const files = [thumbnail, document, receipt, video];
+    const filesTooLarge = files.filter(
+      (file) => file.size > FILE_SIZE_LIMIT_IN_KB * 1024
+    );
+    if (filesTooLarge.length > 0) {
+      console.log("Files too large", filesTooLarge);
+
+      return;
+    }
+
+    await handleFileSubmit();
+    await getData();
   };
+
+  async function handleFileSubmit() {
+    // Reset statuses
+    setStatus({ title: "", isDone: false, payload: null });
+    setAddToCollectionError(null);
+
+    console.log("Uploading new content");
+
+    // Create protected data and add it to collection
+    try {
+      // 1- Create protected data
+      const { address } = await createProtectedData({
+        thumbnail,
+        video,
+        propertyDoc: document,
+        receipt,
+        details: {
+          title,
+          description,
+          location,
+          bedrooms,
+        },
+        onStatusUpdate: handleStatusUpdate,
+      });
+      setCreatedProtectedDataAddress(address);
+
+      console.log("Uploaded new content", address);
+
+      // 2- Get or create collection
+      const collectionId = await getOrCreateCollection({
+        onStatusUpdate: handleStatusUpdate,
+      });
+
+      // 3- Add to collection
+      const dataProtector = await getDataProtectorClient();
+      await dataProtector.dataProtectorSharing.addToCollection({
+        protectedData: address,
+        collectionId,
+        addOnlyAppWhitelist: import.meta.env
+          .VITE_PROTECTED_DATA_DELIVERY_WHITELIST_ADDRESS,
+        onStatusUpdate: (status) => {
+          if (status.title === "APPROVE_COLLECTION_CONTRACT") {
+            const title =
+              "Approve DataProtector Sharing smart-contract to manage this protected data";
+            if (!status.isDone) {
+              handleStatusUpdate({ title, isDone: false });
+            } else {
+              handleStatusUpdate({ title, isDone: true });
+            }
+          } else if (status.title === "ADD_PROTECTED_DATA_TO_COLLECTION") {
+            const title = "Add protected data to your collection";
+            if (!status.isDone) {
+              handleStatusUpdate({ title, isDone: false });
+            } else {
+              handleStatusUpdate({ title, isDone: true });
+            }
+          }
+        },
+      });
+
+      console.log("Added to collection", address);
+
+      setAddToCollectionSuccess(true);
+
+      // resetUploadForm
+      // TODO: reset form later
+    } catch (err) {
+      // resetStatuses
+      setStatus({ title: "", isDone: false, payload: null });
+      setAddToCollectionError(err?.message);
+
+      console.error("[Upload new content] ERROR", err, err.data && err.data);
+
+      // TODO: Handle when fails but protected data well created, save protected data address to retry?
+    }
+  }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
-      <fieldset className={styles.fieldset}>
-        <h2>Upload Property Files</h2>
+    <>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <Upload
+          property={{
+            title,
+            description,
+            location,
+            bedrooms,
+            thumbnail,
+            document,
+            receipt,
+            video,
+          }}
+          handleInputChange={handleInputChange}
+          handleFileUpload={handleFileUpload}
+        />
+      </form>
 
-        <section>
-          {/* Thumbnail Upload */}
-          <label className={styles.fileLabel}>
-            <UploadCloud size={48} absoluteStrokeWidth />
-            <div>
-              <h3>Thumbnail</h3>
-              {property.thumbnail ? (
-                <p>{property.thumbnail.name}</p>
-              ) : (
-                <p>Upload a single JPG/PNG image. Max size: 10MB.</p>
-              )}
-            </div>
-            <input
-              className={styles.fileInput}
-              type="file"
-              accept=".jpg, .jpeg, .png"
-              required
-              onChange={(e) => handleFileUpload(e, "thumbnail")}
-            />
-          </label>
-          {/* Video Upload */}
-          <label className={styles.fileLabel}>
-            <UploadCloud size={48} absoluteStrokeWidth />
-            <div>
-              <h3>Inspection Video</h3>
-              {property.video ? (
-                <p>{property.video.name}</p>
-              ) : (
-                <p>Upload a video walkthrough (MP4). Max size: 50MB.</p>
-              )}
-            </div>
-            <input
-              className={styles.fileInput}
-              type="file"
-              accept=".mp4"
-              required
-              onChange={(e) => handleFileUpload(e, "video")}
-            />
-          </label>
-        </section>
+      {addToCollectionError && (
+        <div className={styles.error}>{addToCollectionError}</div>
+      )}
 
-        <section>
-          {/* Document Upload */}
-          <label className={styles.fileLabel}>
-            <UploadCloud size={48} absoluteStrokeWidth />
-            <div>
-              <h3>Property Document</h3>
-              {property.document ? (
-                <p>{property.document.name}</p>
-              ) : (
-                <p>Upload a legal document (PDF). Max size: 10MB.</p>
-              )}
-            </div>
-            <input
-              className={styles.fileInput}
-              type="file"
-              accept=".pdf"
-              required
-              onChange={(e) => handleFileUpload(e, "document")}
-            />
-          </label>
-          {/* Receipt Upload */}
-          <label className={styles.fileLabel}>
-            <UploadCloud size={48} absoluteStrokeWidth />
-            <div>
-              <h3>Receipt</h3>
-              {property.receipt ? (
-                <p>{property.receipt.name}</p>
-              ) : (
-                <p>
-                  Upload a receipt for the transaction (PDF). Max size: 10MB.
-                </p>
-              )}
-            </div>
-            <input
-              className={styles.fileInput}
-              type="file"
-              accept=".pdf"
-              required
-              onChange={(e) => handleFileUpload(e, "receipt")}
-            />
-          </label>
-        </section>
-        <Button label="Continue" btnClass="primary" />
-      </fieldset>
-    </form>
+      {addToCollectionSuccess && (
+        <div className={styles.success}>
+          Property successfully uploaded!
+          <Button label="Continue to Monetize" />
+        </div>
+      )}
+    </>
   );
 }
 
