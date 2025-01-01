@@ -1,101 +1,121 @@
 import React, { useState } from "react";
 import styles from "./NewProperty.module.css";
+import Button from "../../../../../../components/button/Button";
+import { UploadCloud } from "lucide-react";
 
 function NewProperty({ onSubmit }) {
   const [property, setProperty] = useState({
-    title: "",
-    description: "",
-    location: "",
-    rooms: "",
-    price: "",
-    category: "rent",
-    images: [],
+    thumbnail: null,
+    document: null,
+    receipt: null,
+    video: null,
   });
 
-  const handleChange = (e) => {
-    setProperty({ ...property, [e.target.name]: e.target.value });
-  };
-
-  const handleImageUpload = (e) => {
-    const image = e.target.files[0];
+  const handleFileUpload = (e, field) => {
+    const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
-      setProperty({ ...property, images: [...property.images, reader.result] });
+      setProperty((prev) => ({
+        ...prev,
+        [field]: { name: file.name, type: file.type, content: reader.result },
+      }));
     };
-    reader.readAsDataURL(image);
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log(property);
-    alert("Property Added");
+    console.log("Property Details:", property);
+    alert("Property details uploaded successfully!");
+    if (onSubmit) onSubmit(property);
   };
+
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="title"
-        placeholder="Property Title"
-        value={property.title}
-        required
-        onChange={handleChange}
-        className={styles.input}
-      />
-      <textarea
-        type="text"
-        name="description"
-        placeholder="Property description"
-        value={property.description}
-        required
-        onChange={handleChange}
-        className={styles.input}
-      />
-      <input
-        type="text"
-        name="location"
-        placeholder="Property Address"
-        value={property.location}
-        required
-        onChange={handleChange}
-        className={styles.input}
-      />
-      <input
-        type="number"
-        name="price"
-        placeholder="Property Price"
-        value={property.price}
-        required
-        onChange={handleChange}
-        className={styles.input}
-      />
-      <input
-        type="number"
-        name="rooms"
-        placeholder="Number of Rooms"
-        value={property.rooms}
-        required
-        onChange={handleChange}
-        className={styles.input}
-      />
+      <fieldset>
+        <h2>Upload Property Files</h2>
 
-      <select name="category" className={styles.select}>
-        <option value="rent">For Rent</option>
-        <option value="sale">For Sale</option>
-      </select>
+        {/* Thumbnail Upload */}
+        <label className={styles.fileLabel}>
+          <UploadCloud size={48} absoluteStrokeWidth />
+          <div>
+            <h3>Thumbnail</h3>
+            {property.thumbnail ? (
+              <p>{property.thumbnail.name}</p>
+            ) : (
+              <p>Upload a single JPG/PNG image. Max size: 10MB.</p>
+            )}
+          </div>
+          <input
+            className={styles.fileInput}
+            type="file"
+            accept=".jpg, .jpeg, .png"
+            required
+            onChange={(e) => handleFileUpload(e, "thumbnail")}
+          />
+        </label>
 
-      <input
-        className={styles.fileInput}
-        type="file"
-        name="images"
-        multiple
-        required
-        onChange={handleImageUpload}
-      />
+        {/* Document Upload */}
+        <label className={styles.fileLabel}>
+          <UploadCloud size={48} absoluteStrokeWidth />
+          <div>
+            <h3>Property Document</h3>
+            {property.document ? (
+              <p>{property.document.name}</p>
+            ) : (
+              <p>Upload a legal document (PDF). Max size: 10MB.</p>
+            )}
+          </div>
+          <input
+            className={styles.fileInput}
+            type="file"
+            accept=".pdf"
+            required
+            onChange={(e) => handleFileUpload(e, "document")}
+          />
+        </label>
 
-      <button className={styles.submitButton} type="submit">
-        Submit
-      </button>
+        {/* Receipt Upload */}
+        <label className={styles.fileLabel}>
+          <UploadCloud size={48} absoluteStrokeWidth />
+          <div>
+            <h3>Receipt</h3>
+            {property.receipt ? (
+              <p>{property.receipt.name}</p>
+            ) : (
+              <p>Upload a receipt for the transaction (PDF). Max size: 10MB.</p>
+            )}
+          </div>
+          <input
+            className={styles.fileInput}
+            type="file"
+            accept=".pdf"
+            required
+            onChange={(e) => handleFileUpload(e, "receipt")}
+          />
+        </label>
+
+        {/* Video Upload */}
+        <label className={styles.fileLabel}>
+          <UploadCloud size={48} absoluteStrokeWidth />
+          <div>
+            <h3>Inspection Video</h3>
+            {property.video ? (
+              <p>{property.video.name}</p>
+            ) : (
+              <p>Upload a video walkthrough (MP4). Max size: 50MB.</p>
+            )}
+          </div>
+          <input
+            className={styles.fileInput}
+            type="file"
+            accept=".mp4"
+            required
+            onChange={(e) => handleFileUpload(e, "video")}
+          />
+        </label>
+        <Button label="Continue" btnClass="primary" />
+      </fieldset>
     </form>
   );
 }
