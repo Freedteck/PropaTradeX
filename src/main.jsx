@@ -51,20 +51,18 @@ const router = createBrowserRouter([
               },
               {
                 path: "rent",
-                index: true,
                 element: <Properties propertyType={"rent"} />,
               },
               {
                 path: "purchase",
-                index: true,
                 element: <Properties propertyType={"purchase"} />,
               },
-              {
-                path: "new",
-                index: true,
-                element: <NewProperty />,
-              },
             ],
+          },
+          {
+            path: "new",
+            index: true,
+            element: <NewProperty />,
           },
         ],
       },
