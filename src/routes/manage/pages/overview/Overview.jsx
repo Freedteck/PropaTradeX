@@ -35,10 +35,9 @@ const Overview = () => {
             </NavLink>
           </li>
         </ul>
-        <Link to="/manage/properties/new-property">
+        <Link to="/manage/properties/new">
           <Button label="New Property" btnClass="primary" />
         </Link>
-        
       </nav>
       <div className={styles.content}>
         <Outlet />
