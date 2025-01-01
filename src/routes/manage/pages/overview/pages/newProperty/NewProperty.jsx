@@ -32,88 +32,92 @@ function NewProperty({ onSubmit }) {
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <fieldset>
+      <fieldset className={styles.fieldset}>
         <h2>Upload Property Files</h2>
 
-        {/* Thumbnail Upload */}
-        <label className={styles.fileLabel}>
-          <UploadCloud size={48} absoluteStrokeWidth />
-          <div>
-            <h3>Thumbnail</h3>
-            {property.thumbnail ? (
-              <p>{property.thumbnail.name}</p>
-            ) : (
-              <p>Upload a single JPG/PNG image. Max size: 10MB.</p>
-            )}
-          </div>
-          <input
-            className={styles.fileInput}
-            type="file"
-            accept=".jpg, .jpeg, .png"
-            required
-            onChange={(e) => handleFileUpload(e, "thumbnail")}
-          />
-        </label>
+        <section>
+          {/* Thumbnail Upload */}
+          <label className={styles.fileLabel}>
+            <UploadCloud size={48} absoluteStrokeWidth />
+            <div>
+              <h3>Thumbnail</h3>
+              {property.thumbnail ? (
+                <p>{property.thumbnail.name}</p>
+              ) : (
+                <p>Upload a single JPG/PNG image. Max size: 10MB.</p>
+              )}
+            </div>
+            <input
+              className={styles.fileInput}
+              type="file"
+              accept=".jpg, .jpeg, .png"
+              required
+              onChange={(e) => handleFileUpload(e, "thumbnail")}
+            />
+          </label>
+          {/* Video Upload */}
+          <label className={styles.fileLabel}>
+            <UploadCloud size={48} absoluteStrokeWidth />
+            <div>
+              <h3>Inspection Video</h3>
+              {property.video ? (
+                <p>{property.video.name}</p>
+              ) : (
+                <p>Upload a video walkthrough (MP4). Max size: 50MB.</p>
+              )}
+            </div>
+            <input
+              className={styles.fileInput}
+              type="file"
+              accept=".mp4"
+              required
+              onChange={(e) => handleFileUpload(e, "video")}
+            />
+          </label>
+        </section>
 
-        {/* Document Upload */}
-        <label className={styles.fileLabel}>
-          <UploadCloud size={48} absoluteStrokeWidth />
-          <div>
-            <h3>Property Document</h3>
-            {property.document ? (
-              <p>{property.document.name}</p>
-            ) : (
-              <p>Upload a legal document (PDF). Max size: 10MB.</p>
-            )}
-          </div>
-          <input
-            className={styles.fileInput}
-            type="file"
-            accept=".pdf"
-            required
-            onChange={(e) => handleFileUpload(e, "document")}
-          />
-        </label>
-
-        {/* Receipt Upload */}
-        <label className={styles.fileLabel}>
-          <UploadCloud size={48} absoluteStrokeWidth />
-          <div>
-            <h3>Receipt</h3>
-            {property.receipt ? (
-              <p>{property.receipt.name}</p>
-            ) : (
-              <p>Upload a receipt for the transaction (PDF). Max size: 10MB.</p>
-            )}
-          </div>
-          <input
-            className={styles.fileInput}
-            type="file"
-            accept=".pdf"
-            required
-            onChange={(e) => handleFileUpload(e, "receipt")}
-          />
-        </label>
-
-        {/* Video Upload */}
-        <label className={styles.fileLabel}>
-          <UploadCloud size={48} absoluteStrokeWidth />
-          <div>
-            <h3>Inspection Video</h3>
-            {property.video ? (
-              <p>{property.video.name}</p>
-            ) : (
-              <p>Upload a video walkthrough (MP4). Max size: 50MB.</p>
-            )}
-          </div>
-          <input
-            className={styles.fileInput}
-            type="file"
-            accept=".mp4"
-            required
-            onChange={(e) => handleFileUpload(e, "video")}
-          />
-        </label>
+        <section>
+          {/* Document Upload */}
+          <label className={styles.fileLabel}>
+            <UploadCloud size={48} absoluteStrokeWidth />
+            <div>
+              <h3>Property Document</h3>
+              {property.document ? (
+                <p>{property.document.name}</p>
+              ) : (
+                <p>Upload a legal document (PDF). Max size: 10MB.</p>
+              )}
+            </div>
+            <input
+              className={styles.fileInput}
+              type="file"
+              accept=".pdf"
+              required
+              onChange={(e) => handleFileUpload(e, "document")}
+            />
+          </label>
+          {/* Receipt Upload */}
+          <label className={styles.fileLabel}>
+            <UploadCloud size={48} absoluteStrokeWidth />
+            <div>
+              <h3>Receipt</h3>
+              {property.receipt ? (
+                <p>{property.receipt.name}</p>
+              ) : (
+                <p>
+                  Upload a receipt for the transaction (PDF). Max size: 10MB.
+                </p>
+              )}
+            </div>
+            <input
+              className={styles.fileInput}
+              type="file"
+              accept=".pdf"
+              required
+              onChange={(e) => handleFileUpload(e, "receipt")}
+            />
+          </label>
+        </section>
         <Button label="Continue" btnClass="primary" />
       </fieldset>
     </form>
