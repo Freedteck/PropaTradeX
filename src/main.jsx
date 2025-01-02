@@ -16,6 +16,7 @@ import Overview from "./routes/manage/pages/overview/Overview.jsx";
 import Properties from "./routes/manage/pages/overview/pages/Properties.jsx";
 import Property from "./routes/property/Property.jsx";
 import NewProperty from "./routes/manage/pages/newProperty/NewProperty.jsx";
+import Monetize from "./routes/manage/pages/monetize/Monetize.jsx";
 
 globalThis.Buffer = Buffer;
 
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
             path: "new",
             index: true,
             element: <NewProperty />,
+          },
+          {
+            path: ":protectedDataAddress/monetize",
+            element: <Monetize />,
           },
         ],
       },

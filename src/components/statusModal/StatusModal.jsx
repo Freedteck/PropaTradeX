@@ -4,7 +4,11 @@ import Button from "../button/Button";
 import styles from "./StatusModal.module.css";
 import { CheckCircle, Loader, XCircle } from "lucide-react";
 
-const StatusModal = ({ statuses, addToCollectionSuccess }) => {
+const StatusModal = ({
+  statuses,
+  addToCollectionSuccess,
+  protectedDataAddress,
+}) => {
   const navigate = useNavigate();
   return (
     <div className={styles.bg}>
@@ -29,7 +33,9 @@ const StatusModal = ({ statuses, addToCollectionSuccess }) => {
         {addToCollectionSuccess && (
           <Button
             label="Continue to Monetize"
-            handleClick={() => navigate("/manage/monetize")}
+            handleClick={() =>
+              navigate(`/manage/${protectedDataAddress}/monetize`)
+            }
             btnClass="primary"
           />
         )}
@@ -40,6 +46,8 @@ const StatusModal = ({ statuses, addToCollectionSuccess }) => {
 
 StatusModal.propTypes = {
   statuses: PropTypes.object,
+  addToCollectionSuccess: PropTypes.bool,
+  protectedDataAddress: PropTypes.string,
 };
 
 export default StatusModal;

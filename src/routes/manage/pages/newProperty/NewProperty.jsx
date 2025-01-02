@@ -29,6 +29,8 @@ function NewProperty() {
   const [statuses, setStatuses] = useState({});
   const [addToCollectionError, setAddToCollectionError] = useState();
   const [addToCollectionSuccess, setAddToCollectionSuccess] = useState(false);
+  const [createdProtectedDataAddress, setCreatedProtectedDataAddress] =
+    useState("");
   const { connector } = useAccount();
 
   const handleStatusUpdate = (status) => {
@@ -164,6 +166,7 @@ function NewProperty() {
         receipt,
         onStatusUpdate: handleStatusUpdate,
       });
+      setCreatedProtectedDataAddress(address);
 
       // 2- Get or create collection
       // const collectionId = await getOrCreateCollection({
@@ -232,6 +235,7 @@ function NewProperty() {
           <StatusModal
             statuses={statuses}
             addToCollectionSuccess={addToCollectionSuccess}
+            protectedDataAddress={createdProtectedDataAddress}
           />
         )}
       </div>

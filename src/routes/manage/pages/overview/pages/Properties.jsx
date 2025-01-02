@@ -22,7 +22,7 @@ const Properties = ({ propertyType }) => {
         );
         setProperties(buyableProperties);
       } else {
-        setProperties(allProperties);
+        setProperties(allProperties.slice(0, allProperties.length - 1));
       }
     }
   }, [loading, propertyType, allProperties]);
