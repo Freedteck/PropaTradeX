@@ -1,8 +1,5 @@
 import { createArrayBufferFromFile } from "@iexec/dataprotector";
-import {
-  // getDataProtectorClient,
-  initDataProtectorSDK,
-} from "../clients/dataProtectorClient";
+import { initDataProtectorSDK } from "../clients/dataProtectorClient";
 
 export async function createProtectedData({
   connector,

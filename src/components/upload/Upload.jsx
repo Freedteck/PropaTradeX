@@ -3,7 +3,12 @@ import styles from "./Upload.module.css";
 import { UploadCloud } from "lucide-react";
 import Button from "../button/Button";
 
-const Upload = ({ property, handleInputChange, handleFileUpload }) => {
+const Upload = ({
+  property,
+  handleInputChange,
+  handleFileUpload,
+  isLoading,
+}) => {
   return (
     <fieldset className={styles.fieldset}>
       <h2>Upload Property Details</h2>
@@ -144,7 +149,10 @@ const Upload = ({ property, handleInputChange, handleFileUpload }) => {
         </label>
       </section>
 
-      <Button label="Continue" btnClass="primary" />
+      <Button
+        label={isLoading ? "Please wait ..." : "Continue"}
+        btnClass="primary"
+      />
     </fieldset>
   );
 };

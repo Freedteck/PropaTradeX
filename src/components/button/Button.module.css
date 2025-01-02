@@ -11,6 +11,13 @@
   gap: 1rem;
 }
 
+.btn:hover {
+  opacity: 0.8;
+}
+
+.btn:active {
+  opacity: 0.6;
+}
 .primary {
   composes: btn;
   background-color: var(--primary-color);

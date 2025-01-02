@@ -4,15 +4,17 @@ import Button from "../button/Button";
 import bgImage from "../../assets/image.png";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
+import { readableSecondsToDays } from "../../utils/secondsToDays";
 
 const ProductCard = ({ data }) => {
   const [metaData, setMetaData] = useState(null);
+  const { isConnected } = useAccount();
   useEffect(() => {
     const getMetaData = async () => {
       const request = await fetch(data.metaData);
       const response = await request.json();
       setMetaData(response);
-      console.log(response);
     };
     getMetaData();
   }, [data]);
@@ -32,15 +34,23 @@ const ProductCard = ({ data }) => {
         </p>
         <div className={styles.info}>
           <BedDouble size={16} />
-          <span>{metaData?.rooms}-Bedroom</span>
+          <span>{metaData?.bedrooms}-Bedroom</span>
         </div>
         <div className={styles.info}>
           <MapPin size={16} />
           <span>{metaData?.location}</span>
         </div>
         <div className={styles.price}>
-          <p>{data.price} RLC</p>
-          <Button label="Connect" btnClass="primary" />
+          <p>{data.rentalParams?.price / 10 ** 9} RLC</p>
+          {!isConnected ? (
+            <Button label="Connect" btnClass="primary" />
+          ) : data.isRentable ? (
+            <p className={styles.label}>
+              {readableSecondsToDays(data.rentalParams.duration)} Rent
+            </p>
+          ) : (
+            <p className={styles.label}>For Sale</p>
+          )}
         </div>
       </div>
     </li>

@@ -7,22 +7,22 @@ import { LoaderIcon } from "lucide-react";
 
 const Properties = ({ propertyType }) => {
   const [properties, setProperties] = useState([]);
-  const { allProperties, loading } = useFetchProperties();
+  const { allProperties, loading } = useFetchProperties({ param: "owner" });
 
   useEffect(() => {
     if (!loading) {
       if (propertyType === "rent") {
         const rentedProperties = allProperties.filter(
-          (property) => property.type === "rent"
+          (property) => property.isRentable === true
         );
         setProperties(rentedProperties.slice());
       } else if (propertyType === "purchase") {
         const buyableProperties = allProperties.filter(
-          (property) => property.type === "purchase"
+          (property) => property.isForSale === true
         );
         setProperties(buyableProperties);
       } else {
-        setProperties(allProperties.slice(0, allProperties.length - 1));
+        setProperties(allProperties);
       }
     }
   }, [loading, propertyType, allProperties]);

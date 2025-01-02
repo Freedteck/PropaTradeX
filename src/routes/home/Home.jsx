@@ -4,18 +4,20 @@ import PropertyList from "../../components/propertyList/PropertyList";
 import styles from "./Home.module.css";
 import Button from "../../components/button/Button";
 import { useAccount } from "wagmi";
+import useFetchProperties from "../../hooks/useFetchProperties";
 
 const Home = () => {
   const { isConnected } = useAccount();
-  const propertiesForRent = properties.filter(
-    (property) => property.type === "rent"
+  const { allProperties, loading } = useFetchProperties({ param: "all" });
+  const propertiesForRent = allProperties.filter(
+    (property) => property.isRentable === true
   );
   return (
     <>
       <Banner />
       <div className={styles.featured}>
         <PropertyList
-          properties={properties.slice(-3)}
+          properties={allProperties.slice(-3)}
           heading={"New Properties"}
           desc={
             "Discover the latest properties available for rent or sale in variouslocations."

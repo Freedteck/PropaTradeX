@@ -53,3 +53,15 @@
   font-weight: 700;
   color: var(--secondary-color);
 }
+
+.price .label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--primary-text);
+  border: 1px solid var(--secondary-text);
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

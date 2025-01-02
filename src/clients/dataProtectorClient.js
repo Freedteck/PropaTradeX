@@ -24,11 +24,6 @@ export const initDataProtectorSDK = async ({ connector }) => {
   dataProtectorCore = dataProtector.core;
   dataProtectorSharing = dataProtector.sharing;
 
-  console.log("Data protector SDK initialized", {
-    dataProtectorCore,
-    dataProtectorSharing,
-  });
-
   return { dataProtectorCore, dataProtectorSharing };
 };
 

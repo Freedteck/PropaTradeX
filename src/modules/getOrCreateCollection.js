@@ -2,21 +2,18 @@ import {
   // getDataProtectorClient,
   initDataProtectorSDK,
 } from "../clients/dataProtectorClient";
-import { getWalletAddress } from "../stores/connectorManager";
-import { useUserStore } from "../stores/user.store";
 
-export async function getOrCreateCollection({ onStatusUpdate }) {
+export async function getOrCreateCollection({
+  connector,
+  ownerAddress,
+  onStatusUpdate,
+}) {
   const dataProtector = await initDataProtectorSDK({ connector });
-  const ownerAddress = await getWalletAddress();
 
-  // Fetch collections owned by the user
-  console.log(ownerAddress);
   const collectionsResult =
     await dataProtector.dataProtectorSharing.getCollectionsByOwner({
       owner: ownerAddress,
     });
-
-  console.log("collectionsResult", collectionsResult);
 
   // If collections exist, use the first one
   if (collectionsResult.collections?.length > 0) {
@@ -25,11 +22,6 @@ export async function getOrCreateCollection({ onStatusUpdate }) {
         `It looks like you have more than one collection. The first one will be used. (id: ${collectionsResult.collections[0].id})`
       );
     }
-
-    console.log(
-      "collectionsResult.collections[0].id",
-      collectionsResult.collections[0].id
-    );
     return collectionsResult.collections[0].id;
   }
 
@@ -49,8 +41,6 @@ export async function getOrCreateCollection({ onStatusUpdate }) {
       createdCollectionId: String(createdCollectionId),
     },
   });
-
-  console.log("createdCollectionId", createdCollectionId);
 
   return createdCollectionId;
 }

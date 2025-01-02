@@ -31,7 +31,8 @@ function NewProperty() {
   const [addToCollectionSuccess, setAddToCollectionSuccess] = useState(false);
   const [createdProtectedDataAddress, setCreatedProtectedDataAddress] =
     useState("");
-  const { connector } = useAccount();
+  const { connector, address } = useAccount();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleStatusUpdate = (status) => {
     setStatus(status);
@@ -142,6 +143,8 @@ function NewProperty() {
     resetStatuses();
     setAddToCollectionError(null);
 
+    setIsLoading(true);
+
     try {
       const thumbnailFile = await pinata.upload.file(thumbnail);
       const thumbnailCid = thumbnailFile.IpfsHash;
@@ -171,6 +174,7 @@ function NewProperty() {
       // 2- Get or create collection
       // const collectionId = await getOrCreateCollection({
       //   connector,
+      //   ownerAddress: address,
       //   onStatusUpdate: handleStatusUpdate,
       // });
 
@@ -204,10 +208,13 @@ function NewProperty() {
 
       resetForm();
       setAddToCollectionSuccess(true);
+
+      setIsLoading(false);
     } catch (err) {
       resetStatuses();
       setAddToCollectionError(err?.message);
       console.error("[Upload new content] ERROR", err, err.data && err.data);
+      setIsLoading(false);
     }
   }
 
@@ -227,6 +234,7 @@ function NewProperty() {
           }}
           handleInputChange={handleInputChange}
           handleFileUpload={handleFileUpload}
+          isLoading={isLoading}
         />
       </form>
 

@@ -17,6 +17,7 @@ import Properties from "./routes/manage/pages/overview/pages/Properties.jsx";
 import Property from "./routes/property/Property.jsx";
 import NewProperty from "./routes/manage/pages/newProperty/NewProperty.jsx";
 import Monetize from "./routes/manage/pages/monetize/Monetize.jsx";
+import Messages from "./routes/manage/pages/messages/Messages.jsx";
 
 globalThis.Buffer = Buffer;
 
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
                 element: <Properties propertyType={"purchase"} />,
               },
             ],
+          },
+          {
+            path: "messages",
+            element: <Messages />,
           },
           {
             path: "new",

@@ -3,11 +3,11 @@ import { pinata } from "../utils/pinataConfig";
 import { initDataProtectorSDK } from "../clients/dataProtectorClient";
 import { useAccount } from "wagmi";
 
-const useFetchProperties = () => {
+const useFetchProperties = ({ param }) => {
   const [allProperties, setAllProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { connector } = useAccount();
+  const { connector, address } = useAccount();
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -29,8 +29,6 @@ const useFetchProperties = () => {
           })
         );
 
-        console.log("ipfsFilesUrls", ipfsFilesUrls);
-
         const groupedFilesUrls = [];
         for (let i = 0; i < ipfsFilesUrls.length; i += 3) {
           groupedFilesUrls.push({
@@ -41,14 +39,20 @@ const useFetchProperties = () => {
         }
 
         const { protectedDataInCollection } =
-          await dataProtectorSharing.getProtectedDataInCollections({
-            collectionId: import.meta.env.VITE_COLLECTION_ID,
-          });
+          param === "all"
+            ? await dataProtectorSharing.getProtectedDataInCollections({
+                collectionId: import.meta.env.VITE_COLLECTION_ID,
+              })
+            : await dataProtectorSharing.getProtectedDataInCollections({
+                collectionOwner: address,
+              });
 
         const properties = protectedDataInCollection.map((property, index) => ({
           ...property,
           ...groupedFilesUrls[index],
         }));
+
+        console.log("properties", properties);
 
         setAllProperties(properties);
       } catch (err) {
@@ -59,7 +63,7 @@ const useFetchProperties = () => {
     };
 
     fetchProperties();
-  }, []);
+  }, [param, connector, address]);
 
   return { allProperties, loading, error };
 };
