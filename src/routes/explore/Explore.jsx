@@ -12,6 +12,7 @@ const Explore = () => {
         <PropertyList
           showViewAll={false}
           properties={allProperties}
+          loading={loading}
           heading={"Discover a World of Possibilities"}
           desc={
             "Our portfolio of properties is as diverse as your dreams. Explore the following categories to find the perfect property that resonates with your vision of home"

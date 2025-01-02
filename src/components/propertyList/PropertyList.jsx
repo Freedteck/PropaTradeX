@@ -2,9 +2,11 @@ import PropTypes from "prop-types";
 import styles from "./PropertyList.module.css";
 import ProductCard from "../propertyCard/ProductCard";
 import { Link } from "react-router-dom";
+import { LoaderIcon } from "lucide-react";
 
 const PropertyList = ({
   properties,
+  loading,
   heading,
   desc,
   feature,
@@ -23,11 +25,19 @@ const PropertyList = ({
           </Link>
         )}
       </div>
-      <ul className={styles.row}>
-        {properties.map((property) => (
-          <ProductCard key={property.id} data={property} />
-        ))}
-      </ul>
+      {loading ? (
+        <div className={styles.loader}>
+          <LoaderIcon size={48} />
+        </div>
+      ) : properties.length === 0 ? (
+        <p>No properties found</p>
+      ) : (
+        <ul className={styles.row}>
+          {properties.map((property) => (
+            <ProductCard key={property.id} data={property} />
+          ))}
+        </ul>
+      )}
     </section>
   );
 };

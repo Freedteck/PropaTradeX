@@ -117,7 +117,7 @@ const Monetize = () => {
           <Button
             label="Confirm &rarr;"
             btnClass="primary"
-            onClick={handleSubmit}
+            handleClick={handleSubmit}
           />
         )}
       </fieldset>

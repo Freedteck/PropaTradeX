@@ -37,7 +37,7 @@ const router = createBrowserRouter([
         element: <Explore />,
       },
       {
-        path: "property",
+        path: "property/:protectedDataAddress",
         index: true,
         element: <Property />,
       },

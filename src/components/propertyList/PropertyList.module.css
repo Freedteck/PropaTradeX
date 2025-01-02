@@ -53,10 +53,17 @@
 
 .row {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
 }
 
 .new .row {
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primary-color);
 }

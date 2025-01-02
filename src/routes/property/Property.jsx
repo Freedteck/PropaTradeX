@@ -1,50 +1,116 @@
-import styles from "./Property.module.css"
-import hero from "../../assets/hero.jpg"
-import image from "../../assets/image.png"
+import { useParams } from "react-router-dom";
 import Button from "../../components/button/Button";
+import styles from "./Property.module.css";
+import useFetchPropertyData from "../../hooks/useFetchPropertyData";
+import { useEffect, useState } from "react";
+import {
+  CalendarClock,
+  MailCheck,
+  MapPin,
+  Shapes,
+  ShoppingBagIcon,
+  User2,
+} from "lucide-react";
+import { timestampToReadableDate } from "../../utils/timestampToReadableDate";
+import { secondsToDays } from "../../utils/secondsToDays";
 
 const Property = () => {
-    return(
-        <div className={styles.container}>
-            <h1>Carlifornia, New York</h1>
-            <div className={styles.visuals}>
-                <div className={styles.imageCard}>
-                    <img src={image} />
-                </div>
-                <div className={styles.vid}>
-                    <div>
-                      <img src={image} alt="thumbnail"/>
-                    </div>
-                    <div>
-                      <img src={image} alt="video"/>
-                    </div>
-                </div>
-            </div>
-            <div className={styles.description}>
-              <h3>For Sales</h3>
-              <h2>500 RLC</h2>
-              
-              <div className={styles.describe}>
-                <h1>Description</h1>
-                
-                <h5>Property Type</h5>
-                <p>3 Bedroom</p>
-                
-                <h5>Location</h5>
-                <p>Carlifornia, NewYork</p>
-                
-                <h5>Description</h5>
-                <p>A 3-bedroom flat, spacious residential unit featuring three separate bedrooms, typically designed for families or groups. It often includes a living room, kitchen, one or more bathrooms, and may have additional amenities such as a balcony, storage space, or parking. The flat offers comfortable living areas, making it ideal for those seeking a balance of privacy and shared space.</p>
-                
-              </div>
-              
-              <div className={styles.buttons}>
-                <Button label="Buy Property" btnClass="primary" />
-                <Button label="Contact Agent" btnClass="secondary" />
-              </div>
-            </div>
-        </div>
-        )
-}
+  const { protectedDataAddress } = useParams();
+  const [metaData, setMetaData] = useState({});
+  const { property, loading } = useFetchPropertyData({
+    protectedDataAddress: protectedDataAddress,
+  });
 
-export default Property
+  useEffect(() => {
+    const fetchMetaData = async () => {
+      const request = await fetch(property.metaData);
+      const response = await request.json();
+      setMetaData(response);
+      console.log("response", response);
+    };
+
+    if (property.metaData) {
+      fetchMetaData();
+    }
+
+    return () => {
+      setMetaData({});
+    };
+  }, [property.metaData]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.visuals}>
+        <div
+          className={styles.imageCard}
+          style={{ backgroundImage: `url(${property.thumbnail})` }}
+        ></div>
+        <div className={styles.vid}></div>
+      </div>
+      <div className={styles.details}>
+        <h2>{metaData.title}</h2>
+        <section className={styles.info}>
+          <p>
+            <CalendarClock size={20} absoluteStrokeWidth />
+            {timestampToReadableDate(property.creationTimestamp)}
+          </p>
+          <p>
+            <User2 size={20} absoluteStrokeWidth />
+            {property.collection.owner.id}
+          </p>
+        </section>
+
+        <div className={styles.description}>
+          <h2>Description</h2>
+
+          <h3>Bedroom(s)</h3>
+          <p>{metaData.bedrooms}-Bedroom</p>
+
+          <h3>Location</h3>
+          <p>{metaData.location}</p>
+
+          <h3>Price (RLC)</h3>
+          <p>
+            {property.isForSale
+              ? Number(property.saleParams.price / 1e9)
+              : Number(property.rentalParams.price / 1e9)}
+          </p>
+
+          <h3>Description</h3>
+          <p>{metaData.description}</p>
+        </div>
+
+        <div className={styles.actions}>
+          {property.isRentable && (
+            <Button
+              label={`Rent Property for ${secondsToDays(
+                property.rentalParams.duration
+              )} days`}
+              btnClass="primary"
+              icon={<Shapes size={20} />}
+            />
+          )}
+
+          {property.isForSale && (
+            <Button
+              label={`Buy Property`}
+              btnClass="primary"
+              icon={<ShoppingBagIcon size={20} />}
+            />
+          )}
+          <Button
+            label="Contact Agent"
+            btnClass="secondary"
+            icon={<MailCheck size={20} />}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Property;

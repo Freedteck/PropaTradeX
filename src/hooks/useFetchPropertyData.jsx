@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { pinata } from "../utils/pinataConfig";
 import { initDataProtectorSDK } from "../clients/dataProtectorClient";
 import { useAccount } from "wagmi";
+import { pinata } from "../utils/pinataConfig";
 
-const useFetchProperties = ({ param }) => {
-  const [allProperties, setAllProperties] = useState([]);
+const useFetchPropertyData = ({ protectedDataAddress }) => {
+  const [property, setProperty] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { connector, address } = useAccount();
+  const { connector } = useAccount();
 
   useEffect(() => {
-    const fetchProperties = async () => {
+    const fetchProperty = async () => {
       setLoading(true);
       setError(null);
 
@@ -18,6 +18,7 @@ const useFetchProperties = ({ param }) => {
         const { dataProtectorSharing } = await initDataProtectorSDK({
           connector,
         });
+
         const ipfsFile = await pinata
           .listFiles()
           .pinStart("2025-01-01T22:59:53.001Z");
@@ -39,15 +40,11 @@ const useFetchProperties = ({ param }) => {
         }
 
         const { protectedDataInCollection } =
-          param === "all"
-            ? await dataProtectorSharing.getProtectedDataInCollections({
-                collectionId: import.meta.env.VITE_COLLECTION_ID,
-              })
-            : await dataProtectorSharing.getProtectedDataInCollections({
-                collectionOwner: address,
-              });
+          await dataProtectorSharing.getProtectedDataInCollections({
+            collectionId: import.meta.env.VITE_COLLECTION_ID,
+          });
 
-        const properties = protectedDataInCollection
+        const property = protectedDataInCollection
           .map((property, index) => ({
             ...property,
             ...groupedFilesUrls[index],
@@ -55,11 +52,12 @@ const useFetchProperties = ({ param }) => {
           .filter(
             (property) =>
               property.id !== "0x5d194fdbdb913818fb6b9ed9316e1374c0129bb2"
-          );
+          )
+          .find((property) => property.id === protectedDataAddress);
 
-        console.log("properties", properties);
+        console.log("property", property);
 
-        setAllProperties(properties);
+        setProperty(property);
       } catch (err) {
         setError(err);
       } finally {
@@ -67,10 +65,10 @@ const useFetchProperties = ({ param }) => {
       }
     };
 
-    fetchProperties();
-  }, [param, connector, address]);
+    fetchProperty();
+  }, [protectedDataAddress, connector]);
 
-  return { allProperties, loading, error };
+  return { property, loading, error };
 };
 
-export default useFetchProperties;
+export default useFetchPropertyData;

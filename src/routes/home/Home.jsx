@@ -19,6 +19,7 @@ const Home = () => {
         <PropertyList
           properties={allProperties.slice(-3)}
           heading={"New Properties"}
+          loading={loading}
           desc={
             "Discover the latest properties available for rent or sale in variouslocations."
           }
@@ -29,6 +30,7 @@ const Home = () => {
         <div className={styles.rent}>
           <PropertyList
             properties={propertiesForRent.slice(0, 4)}
+            loading={loading}
             heading={"For Rent"}
             desc={
               "Discover the latest properties available for rent in various locations."
