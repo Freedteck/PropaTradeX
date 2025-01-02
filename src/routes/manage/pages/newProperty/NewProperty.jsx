@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./NewProperty.module.css";
-import Upload from "../../../../../../components/upload/Upload";
-import { createProtectedData } from "../../../../../../modules/createProtectedData";
-import { getOrCreateCollection } from "../../../../../../modules/getOrCreateCollection";
-import { getDataProtectorClient } from "../../../../../../clients/dataProtectorClient";
-// import { WorkflowError } from "@iexec/dataprotector";
-import Button from "../../../../../../components/button/Button";
+import Upload from "../../../../components/upload/Upload";
+import { createProtectedData } from "../../../../modules/createProtectedData";
+import { getOrCreateCollection } from "../../../../modules/getOrCreateCollection";
+import { useAccount } from "wagmi";
+import { pinata } from "../../../../utils/pinataConfig";
+import StatusModal from "../../../../components/statusModal/StatusModal";
+import { initDataProtectorSDK } from "../../../../clients/dataProtectorClient";
 
 // const FILE_SIZE_LIMIT_IN_KB = 500;
 const FILE_SIZE_LIMIT_IN_KB = 10_000;
 
-function NewProperty({ onSubmit }) {
+function NewProperty() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -22,23 +23,40 @@ function NewProperty({ onSubmit }) {
   const [status, setStatus] = useState({
     title: "",
     isDone: false,
+    isError: false,
     payload: null,
   });
-  const [createdProtectedDataAddress, setCreatedProtectedDataAddress] =
-    useState("");
+  const [statuses, setStatuses] = useState({});
   const [addToCollectionError, setAddToCollectionError] = useState();
   const [addToCollectionSuccess, setAddToCollectionSuccess] = useState(false);
+  const { connector } = useAccount();
 
   const handleStatusUpdate = (status) => {
     setStatus(status);
+    setStatuses((prev) => ({
+      ...prev,
+      [status.title]: {
+        isDone: status.isDone,
+        payload: status.payload,
+        isError: status.isError || false,
+      },
+    }));
   };
 
-  const getData = async () => {
-    const { dataProtectorSharing } = await getDataProtectorClient();
-    const { protectedDataInCollection } =
-      await dataProtectorSharing.getProtectedDataInCollections();
+  const resetStatuses = () => {
+    setStatus({ title: "", isDone: false, payload: null });
+    setStatuses({});
+  };
 
-    console.log("Protected data in collection", protectedDataInCollection);
+  const resetForm = () => {
+    setTitle("");
+    setDescription("");
+    setLocation("");
+    setBedrooms(1);
+    setThumbnail(null);
+    setDocument(null);
+    setReceipt(null);
+    setVideo(null);
   };
 
   const handleInputChange = (e) => {
@@ -111,51 +129,54 @@ function NewProperty({ onSubmit }) {
     );
     if (filesTooLarge.length > 0) {
       console.log("Files too large", filesTooLarge);
-
       return;
     }
 
     await handleFileSubmit();
-    await getData();
   };
 
   async function handleFileSubmit() {
     // Reset statuses
-    setStatus({ title: "", isDone: false, payload: null });
+    resetStatuses();
     setAddToCollectionError(null);
 
-    console.log("Uploading new content");
-
-    // Create protected data and add it to collection
     try {
-      // 1- Create protected data
+      const thumbnailFile = await pinata.upload.file(thumbnail);
+      const thumbnailCid = thumbnailFile.IpfsHash;
+      console.log("Thumbnail CID", thumbnailCid);
+
+      const videoFile = await pinata.upload.file(video);
+      const videoCid = videoFile.IpfsHash;
+      console.log("Video CID", videoCid);
+
+      const metaData = await pinata.upload.json({
+        title,
+        description,
+        location,
+        bedrooms,
+      });
+      const metaDataCid = metaData.IpfsHash;
+      console.log("Meta Data CID", metaDataCid);
+
       const { address } = await createProtectedData({
-        thumbnail,
-        video,
+        connector,
         propertyDoc: document,
         receipt,
-        details: {
-          title,
-          description,
-          location,
-          bedrooms,
-        },
         onStatusUpdate: handleStatusUpdate,
       });
-      setCreatedProtectedDataAddress(address);
-
-      console.log("Uploaded new content", address);
 
       // 2- Get or create collection
-      const collectionId = await getOrCreateCollection({
-        onStatusUpdate: handleStatusUpdate,
-      });
+      // const collectionId = await getOrCreateCollection({
+      //   connector,
+      //   onStatusUpdate: handleStatusUpdate,
+      // });
 
-      // 3- Add to collection
-      const dataProtector = await getDataProtectorClient();
+      // console.log("Collection ID", collectionId);
+
+      const dataProtector = await initDataProtectorSDK({ connector });
       await dataProtector.dataProtectorSharing.addToCollection({
         protectedData: address,
-        collectionId,
+        collectionId: import.meta.env.VITE_COLLECTION_ID,
         addOnlyAppWhitelist: import.meta.env
           .VITE_PROTECTED_DATA_DELIVERY_WHITELIST_ADDRESS,
         onStatusUpdate: (status) => {
@@ -178,20 +199,12 @@ function NewProperty({ onSubmit }) {
         },
       });
 
-      console.log("Added to collection", address);
-
+      resetForm();
       setAddToCollectionSuccess(true);
-
-      // resetUploadForm
-      // TODO: reset form later
     } catch (err) {
-      // resetStatuses
-      setStatus({ title: "", isDone: false, payload: null });
+      resetStatuses();
       setAddToCollectionError(err?.message);
-
       console.error("[Upload new content] ERROR", err, err.data && err.data);
-
-      // TODO: Handle when fails but protected data well created, save protected data address to retry?
     }
   }
 
@@ -214,15 +227,17 @@ function NewProperty({ onSubmit }) {
         />
       </form>
 
+      <div className={styles.status}>
+        {Object.keys(statuses).length > 0 && (
+          <StatusModal
+            statuses={statuses}
+            addToCollectionSuccess={addToCollectionSuccess}
+          />
+        )}
+      </div>
+
       {addToCollectionError && (
         <div className={styles.error}>{addToCollectionError}</div>
-      )}
-
-      {addToCollectionSuccess && (
-        <div className={styles.success}>
-          Property successfully uploaded!
-          <Button label="Continue to Monetize" />
-        </div>
       )}
     </>
   );

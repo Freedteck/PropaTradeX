@@ -1,8 +1,4 @@
-import {
-  IExecDataProtector,
-  IExecDataProtectorCore,
-  IExecDataProtectorSharing,
-} from "@iexec/dataprotector";
+import { IExecDataProtector } from "@iexec/dataprotector";
 import { useUserStore } from "../stores/user.store";
 import { getConnector } from "../stores/connectorManager";
 
@@ -14,15 +10,8 @@ export const cleanDataProtectorSDK = () => {
 };
 
 export const initDataProtectorSDK = async ({ connector }) => {
+  console.log("Initializing data protector SDK...");
   const provider = await connector?.getProvider();
-  console.log("Initializing iExec DataProtector SDK", provider);
-
-  // Uncomment and configure if necessary
-  // const iexecOptions = {
-  //   smsURL: process.env.VITE_SMS_URL || undefined,
-  //   iexecGatewayURL: process.env.VITE_IEXEC_GATEWAY_URL || undefined,
-  //   resultProxyURL: process.env.VITE_RESULT_PROXY_URL || undefined,
-  // };
 
   const dataProtectorOptions = {
     subgraphUrl: import.meta.env.VITE_DATAPROTECTOR_SUBGRAPH_URL,
@@ -30,21 +19,30 @@ export const initDataProtectorSDK = async ({ connector }) => {
     ipfsNode: import.meta.env.VITE_IPFS_NODE_URL,
   };
 
-  const dataProtector = new IExecDataProtector(provider);
+  const dataProtector = new IExecDataProtector(provider, dataProtectorOptions);
 
   dataProtectorCore = dataProtector.core;
   dataProtectorSharing = dataProtector.sharing;
+
+  console.log("Data protector SDK initialized", {
+    dataProtectorCore,
+    dataProtectorSharing,
+  });
+
+  return { dataProtectorCore, dataProtectorSharing };
 };
 
-export async function getDataProtectorClient() {
-  if (!dataProtectorCore) {
-    const connector = getConnector();
-    console.log("Connector", connector);
+// export const getDataProtectorClient = async () => {
+//   if (!dataProtectorCore || !dataProtectorSharing) {
+//     const connector = getConnector();
+//     if (!connector) throw new Error("No connector available");
 
-    await initDataProtectorSDK({ connector });
-  }
-  if (!dataProtectorCore || !dataProtectorSharing) {
-    throw new Error("iExecDataProtector is not initialized");
-  }
-  return { dataProtectorCore, dataProtectorSharing };
-}
+//     await initDataProtectorSDK({ connector });
+//   }
+
+//   if (!dataProtectorCore || !dataProtectorSharing) {
+//     throw new Error("iExecDataProtector is not initialized");
+//   }
+
+//   return { dataProtectorCore, dataProtectorSharing };
+// };

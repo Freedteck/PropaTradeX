@@ -5,11 +5,11 @@ export const setConnector = (newConnector) => {
 };
 
 export const getConnector = () => {
-  if (!connector) {
-    throw new Error(
-      "Connector is not initialized. Please connect your wallet."
-    );
-  }
+  // if (!connector) {
+  //   throw new Error(
+  //     "Connector is not initialized. Please connect your wallet."
+  //   );
+  // }
   return connector;
 };
 

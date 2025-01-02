@@ -2,17 +2,9 @@ import { Link, NavLink } from "react-router-dom";
 import styles from "./Header.module.css";
 import { ConnectKitButton } from "connectkit";
 import { useAccount } from "wagmi";
-import { useEffect } from "react";
-import { setConnector } from "../../stores/connectorManager";
 
 const Header = () => {
-  const { isConnected, connector } = useAccount();
-
-  useEffect(() => {
-    if (connector) {
-      setConnector(connector);
-    }
-  });
+  const { isConnected } = useAccount();
 
   return (
     <header>
