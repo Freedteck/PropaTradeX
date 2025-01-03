@@ -5,6 +5,7 @@ import useFetchPropertyData from "../../hooks/useFetchPropertyData";
 import { useEffect, useState } from "react";
 import {
   CalendarClock,
+  Loader,
   MailCheck,
   MapPin,
   Shapes,
@@ -39,7 +40,11 @@ const Property = () => {
   }, [property.metaData]);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className={styles.loader}>
+        <Loader size={48} />
+      </div>
+    );
   }
 
   return (
