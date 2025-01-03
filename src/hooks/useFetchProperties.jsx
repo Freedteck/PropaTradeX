@@ -45,6 +45,7 @@ const useFetchProperties = ({ param }) => {
               })
             : await dataProtectorSharing.getProtectedDataInCollections({
                 collectionOwner: address,
+                collectionId: import.meta.env.VITE_COLLECTION_ID,
               });
 
         const properties = protectedDataInCollection
