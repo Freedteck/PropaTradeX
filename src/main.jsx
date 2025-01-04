@@ -18,6 +18,8 @@ import Property from "./routes/property/Property.jsx";
 import NewProperty from "./routes/manage/pages/newProperty/NewProperty.jsx";
 import Monetize from "./routes/manage/pages/monetize/Monetize.jsx";
 import Messages from "./routes/manage/pages/messages/Messages.jsx";
+import Profile from "./routes/manage/pages/profile/Profile.jsx";
+import EditProfile from "./routes/manage/pages/editprofile/EditProfile.jsx";
 
 globalThis.Buffer = Buffer;
 
@@ -80,6 +82,14 @@ const router = createBrowserRouter([
             path: ":protectedDataAddress/monetize",
             element: <Monetize />,
           },
+          {
+            path: "profile",
+            element: <Profile />,
+          },
+         {
+            path: "profile/edit",
+            element: <EditProfile />,
+          } 
         ],
       },
     ],
