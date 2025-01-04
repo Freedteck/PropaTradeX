@@ -7,9 +7,9 @@ const Profile = () => {
     const [userData, setUserData] = useState({
         name: "",
         address: "",
-        followers: 0,
-        totalContent: 0,
-        rentals: 0,
+        followers: 10,
+        totalContent: 6,
+        rentals: 4,
         subscriptionStatus: false,
 
     });
