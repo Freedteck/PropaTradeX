@@ -22,7 +22,7 @@ const Chat = () =>{
         timeStamp="2:25 PM"/>
       </div>
 
-      <form>
+      <form className={styles.form}>
         <input 
         type="text"
         placeholder="Enter your message"/>

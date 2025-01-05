@@ -6,7 +6,7 @@
   padding: 1em;
 }
 
-Link {
+.messages Link {
   width: 100%;
   text-decoration: none;
 }
@@ -23,7 +23,6 @@ Link {
 .chatItem:hover {
   background-color: var(--secondary-bg);
 }
-
 
 .chatInfo {
   display: flex;
