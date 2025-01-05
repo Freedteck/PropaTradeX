@@ -5,6 +5,7 @@ export async function createProtectedData({
   connector,
   propertyDoc,
   receipt,
+  propertyTitle,
   onStatusUpdate,
 }) {
   const { dataProtectorCore } = await initDataProtectorSDK({ connector });
@@ -27,7 +28,7 @@ export async function createProtectedData({
 
   return dataProtectorCore.protectData({
     data: { files: reduceArray(filesArray) },
-    name: receipt.name,
+    name: propertyTitle,
     onStatusUpdate: (status) => {
       keepInterestingStatusUpdates(onStatusUpdate, status);
     },

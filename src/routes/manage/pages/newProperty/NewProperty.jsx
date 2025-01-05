@@ -7,6 +7,8 @@ import { useAccount } from "wagmi";
 import { pinata } from "../../../../utils/pinataConfig";
 import StatusModal from "../../../../components/statusModal/StatusModal";
 import { initDataProtectorSDK } from "../../../../clients/dataProtectorClient";
+import useFetchCollectionIds from "../../../../hooks/useFetchCollectionIds";
+import { toast, ToastContainer } from "react-toastify";
 
 // const FILE_SIZE_LIMIT_IN_KB = 500;
 const FILE_SIZE_LIMIT_IN_KB = 10_000;
@@ -31,8 +33,9 @@ function NewProperty() {
   const [addToCollectionSuccess, setAddToCollectionSuccess] = useState(false);
   const [createdProtectedDataAddress, setCreatedProtectedDataAddress] =
     useState("");
-  const { connector, address } = useAccount();
+  const { connector, address: ownerAddress } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
+  const { collectionIds } = useFetchCollectionIds();
 
   const handleStatusUpdate = (status) => {
     setStatus(status);
@@ -146,44 +149,92 @@ function NewProperty() {
     setIsLoading(true);
 
     try {
-      const thumbnailFile = await pinata.upload.file(thumbnail);
-      const thumbnailCid = thumbnailFile.IpfsHash;
-      console.log("Thumbnail CID", thumbnailCid);
+      const uploadFileToPinata = async () => {
+        const thumbnailFile = await pinata.upload.file(thumbnail, {
+          metadata: { name: title },
+        });
+        const thumbnailCid = thumbnailFile.IpfsHash;
+        console.log("Thumbnail CID", thumbnailCid);
 
-      const videoFile = await pinata.upload.file(video);
-      const videoCid = videoFile.IpfsHash;
-      console.log("Video CID", videoCid);
+        const videoFile = await pinata.upload.file(video, {
+          metadata: { name: title },
+        });
+        const videoCid = videoFile.IpfsHash;
+        console.log("Video CID", videoCid);
 
-      const metaData = await pinata.upload.json({
-        title,
-        description,
-        location,
-        bedrooms,
-      });
-      const metaDataCid = metaData.IpfsHash;
-      console.log("Meta Data CID", metaDataCid);
+        const metaData = await pinata.upload.json(
+          {
+            title,
+            description,
+            location,
+            bedrooms,
+          },
+          { metadata: { name: title } }
+        );
+        const metaDataCid = metaData.IpfsHash;
+        console.log("Meta Data CID", metaDataCid);
+      };
+
+      toast.promise(
+        uploadFileToPinata,
+        {
+          pending: "Uploading files securely...",
+          success: "Files uploaded successfully",
+          error: "Error uploading files",
+        },
+        {
+          position: "top-center",
+        }
+      );
 
       const { address } = await createProtectedData({
         connector,
         propertyDoc: document,
         receipt,
+        propertyTitle: title,
         onStatusUpdate: handleStatusUpdate,
       });
+
       setCreatedProtectedDataAddress(address);
 
       // 2- Get or create collection
-      // const collectionId = await getOrCreateCollection({
-      //   connector,
-      //   ownerAddress: address,
-      //   onStatusUpdate: handleStatusUpdate,
-      // });
+      const collectionId = await getOrCreateCollection({
+        connector,
+        ownerAddress: ownerAddress,
+        onStatusUpdate: handleStatusUpdate,
+      });
 
-      // console.log("Collection ID", collectionId);
+      console.log("Collection ID", collectionId);
+
+      if (!collectionIds.includes(collectionId)) {
+        const addCidTOCollection = async () => {
+          const collectionIdCid = await pinata.upload.json({ collectionId });
+          console.log("Collection ID CID", collectionIdCid);
+
+          const addCidToGroup = await pinata.groups.addCids({
+            groupId: import.meta.env.VITE_PINATA_COLLECTION_ID,
+            cids: [collectionIdCid.IpfsHash],
+          });
+          console.log("Add CID to group", addCidToGroup);
+        };
+
+        toast.promise(
+          addCidTOCollection,
+          {
+            pending: "Adding CID to collection...",
+            success: "CID added to collection",
+            error: "Error adding CID to collection",
+          },
+          {
+            position: "top-center",
+          }
+        );
+      }
 
       const dataProtector = await initDataProtectorSDK({ connector });
       await dataProtector.dataProtectorSharing.addToCollection({
         protectedData: address,
-        collectionId: import.meta.env.VITE_COLLECTION_ID,
+        collectionId,
         addOnlyAppWhitelist: import.meta.env
           .VITE_PROTECTED_DATA_DELIVERY_WHITELIST_ADDRESS,
         onStatusUpdate: (status) => {
@@ -220,6 +271,7 @@ function NewProperty() {
 
   return (
     <>
+      <ToastContainer />
       <form className={styles.form} onSubmit={handleSubmit}>
         <Upload
           property={{

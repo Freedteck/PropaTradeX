@@ -2,6 +2,7 @@ import { Link, NavLink } from "react-router-dom";
 import styles from "./Header.module.css";
 import { ConnectKitButton } from "connectkit";
 import { useAccount } from "wagmi";
+import Button from "../button/Button";
 
 const Header = () => {
   const { isConnected } = useAccount();
@@ -32,7 +33,6 @@ const Header = () => {
             </li>
           </ul>
         )}
-        {/* <Button btnClass="primary" label="Connect Wallet" /> */}
         <ConnectKitButton mode="light" />
       </nav>
     </header>

@@ -1,17 +1,39 @@
+import { useEffect, useState } from "react";
 import Hero from "../../components/hero/Hero";
 import PropertyList from "../../components/propertyList/PropertyList";
-import useFetchProperties from "../../hooks/useFetchProperties";
 import styles from "./Explore.module.css";
+import useFetchCollectionIds from "../../hooks/useFetchCollectionIds";
+import { useAccount } from "wagmi";
+import { getProtectedProperties } from "../../modules/getProtectedProperties";
 
 const Explore = () => {
-  const { allProperties, loading } = useFetchProperties({ param: "all" });
+  const [properties, setProperties] = useState([]);
+  const { collectionIds, loading } = useFetchCollectionIds();
+  const { connector } = useAccount();
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      if (!loading) {
+        const protectedProperties = await getProtectedProperties(
+          collectionIds,
+          connector
+        );
+
+        console.log("protectedProperties", protectedProperties);
+
+        setProperties(protectedProperties);
+      }
+    };
+
+    fetchProperties();
+  }, [collectionIds, loading, connector]);
   return (
     <div className={styles.explore}>
       <Hero isExplore={true} />
       <div className={styles.all}>
         <PropertyList
           showViewAll={false}
-          properties={allProperties}
+          properties={properties}
           loading={loading}
           heading={"Discover a World of Possibilities"}
           desc={

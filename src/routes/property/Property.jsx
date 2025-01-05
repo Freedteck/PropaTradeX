@@ -7,7 +7,6 @@ import {
   CalendarClock,
   Loader,
   MailCheck,
-  MapPin,
   Shapes,
   ShoppingBagIcon,
   User2,
@@ -23,21 +22,15 @@ const Property = () => {
   });
 
   useEffect(() => {
+    const PropertyData = property;
     const fetchMetaData = async () => {
-      const request = await fetch(property.metaData);
+      const request = await fetch(PropertyData.metaData);
       const response = await request.json();
       setMetaData(response);
-      console.log("response", response);
     };
 
-    if (property.metaData) {
-      fetchMetaData();
-    }
-
-    return () => {
-      setMetaData({});
-    };
-  }, [property.metaData]);
+    fetchMetaData();
+  }, [property]);
 
   if (loading) {
     return (

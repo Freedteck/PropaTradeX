@@ -1,23 +1,42 @@
 import Banner from "../../components/banner/Banner";
-import { properties } from "../../samples/properties";
 import PropertyList from "../../components/propertyList/PropertyList";
 import styles from "./Home.module.css";
 import Button from "../../components/button/Button";
 import { useAccount } from "wagmi";
-import useFetchProperties from "../../hooks/useFetchProperties";
+import { useEffect, useState } from "react";
+import { getProtectedProperties } from "../../modules/getProtectedProperties";
+import useFetchCollectionIds from "../../hooks/useFetchCollectionIds";
 
 const Home = () => {
-  const { isConnected } = useAccount();
-  const { allProperties, loading } = useFetchProperties({ param: "all" });
-  const propertiesForRent = allProperties.filter(
+  const [properties, setProperties] = useState([]);
+  const { collectionIds, loading } = useFetchCollectionIds();
+  const { connector, isConnected } = useAccount();
+
+  const propertiesForRent = properties.filter(
     (property) => property.isRentable === true
   );
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      if (!loading) {
+        const protectedProperties = await getProtectedProperties(
+          collectionIds,
+          connector
+        );
+        console.log("protectedProperties", protectedProperties);
+
+        setProperties(protectedProperties);
+      }
+    };
+
+    fetchProperties();
+  }, [collectionIds, loading, connector]);
   return (
     <>
       <Banner />
       <div className={styles.featured}>
         <PropertyList
-          properties={allProperties.slice(-3)}
+          properties={properties.slice(-3)}
           heading={"New Properties"}
           loading={loading}
           desc={

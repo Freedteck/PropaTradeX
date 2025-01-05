@@ -2,30 +2,31 @@ import { useEffect, useState } from "react";
 import ProductCard from "../../../../../components/propertyCard/ProductCard";
 import PropTypes from "prop-types";
 import styles from "./Properties.module.css";
-import useFetchProperties from "../../../../../hooks/useFetchProperties";
 import { LoaderIcon } from "lucide-react";
+import useFetchCollectionIds from "../../../../../hooks/useFetchCollectionIds";
+import { useAccount } from "wagmi";
+import { getUserProtectedProperties } from "../../../../../modules/getUserProtectedProperty";
 
 const Properties = ({ propertyType }) => {
   const [properties, setProperties] = useState([]);
-  const { allProperties, loading } = useFetchProperties({ param: "owner" });
+  const { collectionIds, loading } = useFetchCollectionIds();
+  const { connector, address } = useAccount();
 
   useEffect(() => {
-    if (!loading) {
-      if (propertyType === "rent") {
-        const rentedProperties = allProperties.filter(
-          (property) => property.isRentable === true
+    const fetchProperties = async () => {
+      if (!loading) {
+        const protectedProperties = await getUserProtectedProperties(
+          address,
+          connector
         );
-        setProperties(rentedProperties.slice());
-      } else if (propertyType === "purchase") {
-        const buyableProperties = allProperties.filter(
-          (property) => property.isForSale === true
-        );
-        setProperties(buyableProperties);
-      } else {
-        setProperties(allProperties);
+
+        setProperties(protectedProperties);
+        console.log("protectedProperties", protectedProperties);
       }
-    }
-  }, [loading, propertyType, allProperties]);
+    };
+
+    fetchProperties();
+  }, [collectionIds, loading, connector]);
 
   const setHeadingAndDescription = () => {
     if (propertyType === "rent") {
