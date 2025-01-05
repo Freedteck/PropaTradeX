@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 // import { readableSecondsToDays } from "../../utils/secondsToDays";
 import { Link } from "react-router-dom";
+import { readableSecondsToDays } from "../../utils/secondsToDays";
 
 const ProductCard = ({ data }) => {
   const [metaData, setMetaData] = useState(null);
@@ -20,10 +21,19 @@ const ProductCard = ({ data }) => {
   }, [data]);
 
   return (
-    <Link to={`/property/${data.id}`} className={styles.link}>
+    <Link
+      to={`/property/${data.address || data.protectedData.id}`}
+      className={styles.link}
+    >
       <li className={styles.card}>
         <div className={styles.tag}>
-          {data.id.slice(0, 6)}...{data.id.slice(-6)}
+          {data.address
+            ? data.address.slice(0, 6)
+            : data.protectedData.id.slice(0, 6)}
+          ...
+          {data.address
+            ? data.address.slice(-6)
+            : data.protectedData.id.slice(-6)}
         </div>
         <div
           className={styles.productImage}
@@ -47,8 +57,12 @@ const ProductCard = ({ data }) => {
           <div className={styles.price}>
             {data.isRentable ? (
               <p>{Number(data.rentalParams?.price) / 10 ** 9} RLC</p>
-            ) : (
+            ) : data.isForSale ? (
               <p>{Number(data.saleParams?.price) / 10 ** 9} RLC</p>
+            ) : data.rentalParams ? (
+              <p>{readableSecondsToDays(data.rentalParams.duration)}</p>
+            ) : (
+              ""
             )}
             {!isConnected ? (
               <Button label="Connect" btnClass="primary" />
@@ -57,8 +71,12 @@ const ProductCard = ({ data }) => {
                 <p className={styles.label}>For Rent</p>
                 {/* <small>{readableSecondsToDays(data.rentalParams.duration)}</small> */}
               </div>
-            ) : (
+            ) : data.isForSale ? (
               <p className={styles.label}>For Sale</p>
+            ) : data.rentalParams ? (
+              <p className={styles.label}>Rented</p>
+            ) : (
+              ""
             )}
           </div>
         </div>

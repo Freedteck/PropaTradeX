@@ -6,6 +6,7 @@ import { LoaderIcon } from "lucide-react";
 import useFetchCollectionIds from "../../../../../hooks/useFetchCollectionIds";
 import { useAccount } from "wagmi";
 import { getUserProtectedProperties } from "../../../../../modules/getUserProtectedProperty";
+import { getRentals } from "../../../../../modules/getRentals";
 
 const Properties = ({ propertyType }) => {
   const [properties, setProperties] = useState([]);
@@ -20,10 +21,12 @@ const Properties = ({ propertyType }) => {
           connector
         );
 
+        console.log(protectedProperties);
+
         if (propertyType === "rent") {
-          const propertiesForRent = protectedProperties.filter(
-            (property) => property.isRentable === true
-          );
+          const propertiesForRent = await getRentals(connector, address);
+          console.log(propertiesForRent);
+
           setProperties(propertiesForRent);
         } else if (propertyType === "purchase") {
           const propertiesForSale = protectedProperties.filter(

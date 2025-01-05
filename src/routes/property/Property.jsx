@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Button from "../../components/button/Button";
 import styles from "./Property.module.css";
 import useFetchPropertyData from "../../hooks/useFetchPropertyData";
@@ -16,6 +16,7 @@ import { secondsToDays } from "../../utils/secondsToDays";
 import { useAccount } from "wagmi";
 import { buyProperty } from "../../modules/buyProperty";
 import { toast, ToastContainer } from "react-toastify";
+import { rentProperty } from "../../modules/rentProperty";
 
 const Property = () => {
   const { protectedDataAddress } = useParams();
@@ -25,6 +26,8 @@ const Property = () => {
     protectedDataAddress: protectedDataAddress,
   });
 
+  const [isEditable, setIsEditable] = useState(false);
+
   useEffect(() => {
     const PropertyData = property;
     const fetchMetaData = async () => {
@@ -33,7 +36,17 @@ const Property = () => {
       setMetaData(response);
     };
 
+    if (!loading) {
+      console.log("property", property);
+    }
+
     fetchMetaData();
+  }, [property]);
+
+  useEffect(() => {
+    if (!property.isForSale && !property.isRentable) {
+      setIsEditable(true);
+    }
   }, [property]);
 
   const handleBuy = async (priceInRLC) => {
@@ -42,6 +55,15 @@ const Property = () => {
       priceInRLC,
       connector,
       address
+    );
+    console.log(txn);
+  };
+
+  const handleRent = async (rentalParams) => {
+    const txn = await rentProperty(
+      protectedDataAddress,
+      rentalParams,
+      connector
     );
     console.log(txn);
   };
@@ -74,7 +96,7 @@ const Property = () => {
             </p>
             <p>
               <User2 size={20} absoluteStrokeWidth />
-              {property.collection.owner.id}
+              {property.collection?.owner.id || property.renter}
             </p>
           </section>
 
@@ -89,21 +111,30 @@ const Property = () => {
 
             <h3>Price (RLC)</h3>
             <p>
-              {property.isForSale
-                ? Number(property.saleParams.price / 1e9)
-                : Number(property.rentalParams.price / 1e9)}
+              {property.isForSale ? (
+                Number(property.saleParams.price / 1e9)
+              ) : property.isRentable ? (
+                Number(property.rentalParams.price / 1e9)
+              ) : (
+                <div className={styles.edit}>
+                  Property not for sale or rent
+                  <Link to={`/manage/${protectedDataAddress}/monetize`}>
+                    List Property &rarr;
+                  </Link>
+                </div>
+              )}
             </p>
 
             <h3>Description</h3>
             <p>{metaData.description}</p>
           </div>
 
-          {address.toLowerCase() ===
-            property.collection.owner.id.toLowerCase() && (
+          {address?.toLowerCase() ===
+            property.collection?.owner.id.toLowerCase() && (
             <p>You own this property</p>
           )}
-          {address.toLowerCase() !==
-            property.collection.owner.id.toLowerCase() && (
+          {address?.toLowerCase() !==
+            property.collection?.owner.id.toLowerCase() && (
             <div className={styles.actions}>
               {property.isRentable && (
                 <Button
@@ -112,6 +143,41 @@ const Property = () => {
                   )} days`}
                   btnClass="primary"
                   icon={<Shapes size={20} />}
+                  handleClick={() => handleRent(property.rentalParams)}
+                />
+              )}
+
+              {property.isForSale && (
+                <Button
+                  label={`Buy Property`}
+                  btnClass="primary"
+                  icon={<ShoppingBagIcon size={20} />}
+                  handleClick={() =>
+                    handleBuy(Number(property.saleParams.price))
+                  }
+                />
+              )}
+              <Button
+                label="Contact Agent"
+                btnClass="secondary"
+                icon={<MailCheck size={20} />}
+              />
+            </div>
+          )}
+
+          {address?.toLowerCase() === property.renter.toLowerCase() && (
+            <p>You own this property</p>
+          )}
+          {address?.toLowerCase() !== property.renter.toLowerCase() && (
+            <div className={styles.actions}>
+              {property.isRentable && (
+                <Button
+                  label={`Rent Property for ${secondsToDays(
+                    property.rentalParams.duration
+                  )} days`}
+                  btnClass="primary"
+                  icon={<Shapes size={20} />}
+                  handleClick={() => handleRent(property.rentalParams)}
                 />
               )}
 

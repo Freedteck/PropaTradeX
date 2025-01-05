@@ -1,32 +1,22 @@
 import { initDataProtectorSDK } from "../clients/dataProtectorClient";
 import { pinata } from "../utils/pinataConfig";
 
-export const getUserProtectedProperties = async (ownerAddress, connector) => {
+export const getRentals = async (connector, userAddress) => {
+  console.log("Get rentals");
   const { dataProtectorSharing } = await initDataProtectorSDK({ connector });
-
-  // Fetch data in the collection
-  const { protectedDataInCollection } =
-    await dataProtectorSharing.getProtectedDataInCollections({
-      collectionOwner: ownerAddress,
-    });
-
-  const latestProtectedData = protectedDataInCollection.filter(
-    (protectedData) => {
-      return (
-        protectedData.creationTimestamp * 1000 >=
-        new Date(1736075130 * 1000).getTime()
-      );
-    }
-  );
-
+  const { rentals } = await dataProtectorSharing.getRentals({
+    renterAddress: userAddress,
+    includePastRentals: false,
+  });
+  console.log("Rentals", rentals);
   // Fetch IPFS details for each property
-  const propertiesWithIpfs = await Promise.all(
-    latestProtectedData.map(async (property) => {
+  const rentalsWithIpfs = await Promise.all(
+    rentals.map(async (property) => {
       try {
         // List files from Pinata by name and pin start time
         const pinataFiles = await pinata
           .listFiles()
-          .name(property.name)
+          .name(property.protectedData.name)
           .pinStart("2025-01-05T00:09:39.434Z");
 
         // Convert IPFS hashes to URLs
@@ -56,5 +46,13 @@ export const getUserProtectedProperties = async (ownerAddress, connector) => {
     })
   );
 
-  return propertiesWithIpfs;
+  console.log("Rentals with IPFS", rentalsWithIpfs);
+
+  return rentalsWithIpfs;
+  // Add fake delay for tests, to better see loading state
+  // return new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve(rentals);
+  //   }, 1000);
+  // });
 };
