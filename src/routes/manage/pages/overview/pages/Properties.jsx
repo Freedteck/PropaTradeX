@@ -20,13 +20,24 @@ const Properties = ({ propertyType }) => {
           connector
         );
 
-        setProperties(protectedProperties);
-        console.log("protectedProperties", protectedProperties);
+        if (propertyType === "rent") {
+          const propertiesForRent = protectedProperties.filter(
+            (property) => property.isRentable === true
+          );
+          setProperties(propertiesForRent);
+        } else if (propertyType === "purchase") {
+          const propertiesForSale = protectedProperties.filter(
+            (property) => property.isForSale === true
+          );
+          setProperties(propertiesForSale);
+        } else {
+          setProperties(protectedProperties);
+        }
       }
     };
 
     fetchProperties();
-  }, [collectionIds, loading, connector]);
+  }, [loading, connector, address, propertyType]);
 
   const setHeadingAndDescription = () => {
     if (propertyType === "rent") {

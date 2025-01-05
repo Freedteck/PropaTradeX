@@ -29,8 +29,6 @@ export const getUserProtectedProperties = async (ownerAddress, connector) => {
           .name(property.name)
           .pinStart("2025-01-05T00:09:39.434Z");
 
-        console.log("Pinata Files:", pinataFiles);
-
         // Convert IPFS hashes to URLs
         const ipfsFilesUrls = await Promise.all(
           pinataFiles.map(async (file) => {

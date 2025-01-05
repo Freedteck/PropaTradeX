@@ -19,8 +19,6 @@ const Explore = () => {
           connector
         );
 
-        console.log("protectedProperties", protectedProperties);
-
         setProperties(protectedProperties);
       }
     };

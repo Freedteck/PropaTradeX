@@ -13,10 +13,13 @@ import {
 } from "lucide-react";
 import { timestampToReadableDate } from "../../utils/timestampToReadableDate";
 import { secondsToDays } from "../../utils/secondsToDays";
+import { useAccount } from "wagmi";
+import { buyProperty } from "../../modules/butProperty";
 
 const Property = () => {
   const { protectedDataAddress } = useParams();
   const [metaData, setMetaData] = useState({});
+  const { address, connector } = useAccount();
   const { property, loading } = useFetchPropertyData({
     protectedDataAddress: protectedDataAddress,
   });
@@ -31,6 +34,11 @@ const Property = () => {
 
     fetchMetaData();
   }, [property]);
+
+  const handleBuy = async (priceInRLC) => {
+    console.log("Buy property");
+    await buyProperty(protectedDataAddress, priceInRLC, connector);
+  };
 
   if (loading) {
     return (
@@ -82,30 +90,38 @@ const Property = () => {
           <p>{metaData.description}</p>
         </div>
 
-        <div className={styles.actions}>
-          {property.isRentable && (
-            <Button
-              label={`Rent Property for ${secondsToDays(
-                property.rentalParams.duration
-              )} days`}
-              btnClass="primary"
-              icon={<Shapes size={20} />}
-            />
-          )}
+        {address.toLowerCase() ===
+          property.collection.owner.id.toLowerCase() && (
+          <p>You own this property</p>
+        )}
+        {address.toLowerCase() !==
+          property.collection.owner.id.toLowerCase() && (
+          <div className={styles.actions}>
+            {property.isRentable && (
+              <Button
+                label={`Rent Property for ${secondsToDays(
+                  property.rentalParams.duration
+                )} days`}
+                btnClass="primary"
+                icon={<Shapes size={20} />}
+              />
+            )}
 
-          {property.isForSale && (
+            {property.isForSale && (
+              <Button
+                label={`Buy Property`}
+                btnClass="primary"
+                icon={<ShoppingBagIcon size={20} />}
+                handleClick={() => handleBuy(property.saleParams.price)}
+              />
+            )}
             <Button
-              label={`Buy Property`}
-              btnClass="primary"
-              icon={<ShoppingBagIcon size={20} />}
+              label="Contact Agent"
+              btnClass="secondary"
+              icon={<MailCheck size={20} />}
             />
-          )}
-          <Button
-            label="Contact Agent"
-            btnClass="secondary"
-            icon={<MailCheck size={20} />}
-          />
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

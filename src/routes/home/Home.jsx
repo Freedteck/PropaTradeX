@@ -23,7 +23,6 @@ const Home = () => {
           collectionIds,
           connector
         );
-        console.log("protectedProperties", protectedProperties);
 
         setProperties(protectedProperties);
       }
