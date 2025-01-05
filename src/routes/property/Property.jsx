@@ -50,8 +50,9 @@ const Property = () => {
       setIsEditable(true);
     }
     const thisOwner = property.rentals?.find((prop) => (prop.renter = address));
-    console.log(thisOwner);
-    setRenter(thisOwner);
+    if (!loading) {
+      setRenter(thisOwner.renter);
+    }
   }, [property]);
 
   const handleBuy = async (priceInRLC) => {
@@ -136,10 +137,13 @@ const Property = () => {
           property.collection?.owner.id.toLowerCase() && (
           <p>You own this property</p>
         )}
+
+        {renter && <p>You have rented property</p>}
+
         {address?.toLowerCase() !==
           property.collection?.owner.id.toLowerCase() && (
           <div className={styles.actions}>
-            {property.isRentable && (
+            {!renter && property.isRentable && (
               <Button
                 label={`Rent Property for ${secondsToDays(
                   property.rentalParams.duration
@@ -159,15 +163,11 @@ const Property = () => {
               />
             )}
             <Button
-              label="Contact Agent"
+              label="Contact Owner"
               btnClass="secondary"
               icon={<MailCheck size={20} />}
             />
           </div>
-        )}
-
-        {address?.toLowerCase() === property.renter?.toLowerCase() && (
-          <p>You have rented property</p>
         )}
       </div>
     </div>
