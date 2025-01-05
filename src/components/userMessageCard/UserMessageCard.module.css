@@ -11,12 +11,12 @@
 }
 
 .messageCard p {
-    font-size: 16px;
+    font-size: 1rem;
     color: white;
 }
 
 .messageCard span {
-    font-size: 12px;
+    font-size: 0.75rem;
     color: #e0e0e0;
     text-align: right;
 }
