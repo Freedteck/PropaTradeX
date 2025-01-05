@@ -10,6 +10,7 @@ export const getProtectedProperties = async (collectionIdArray, connector) => {
       const { protectedDataInCollection } =
         await dataProtectorSharing.getProtectedDataInCollections({
           collectionId,
+          isDistributed: true,
         });
 
       const latestProtectedData = protectedDataInCollection.filter(
@@ -77,6 +78,7 @@ export const getProtectedProperties = async (collectionIdArray, connector) => {
   //     );
 
   //   console.log("Filtered Properties:", filteredProperties);
+  console.log("Properties with IPFS:", protectedProperties.flat());
 
   return protectedProperties.flat();
 };

@@ -8,6 +8,7 @@ export const getUserProtectedProperties = async (ownerAddress, connector) => {
   const { protectedDataInCollection } =
     await dataProtectorSharing.getProtectedDataInCollections({
       collectionOwner: ownerAddress,
+      isDistributed: true,
     });
 
   const latestProtectedData = protectedDataInCollection.filter(
@@ -18,6 +19,13 @@ export const getUserProtectedProperties = async (ownerAddress, connector) => {
       );
     }
   );
+
+  const { collections } = await dataProtectorSharing.getCollectionsByOwner({
+    owner: ownerAddress,
+    includeHiddenProtectedDatas: true,
+  });
+
+  console.log("collections", collections);
 
   // Fetch IPFS details for each property
   const propertiesWithIpfs = await Promise.all(

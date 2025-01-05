@@ -14,7 +14,8 @@ import {
 import { timestampToReadableDate } from "../../utils/timestampToReadableDate";
 import { secondsToDays } from "../../utils/secondsToDays";
 import { useAccount } from "wagmi";
-import { buyProperty } from "../../modules/butProperty";
+import { buyProperty } from "../../modules/buyProperty";
+import { toast, ToastContainer } from "react-toastify";
 
 const Property = () => {
   const { protectedDataAddress } = useParams();
@@ -36,8 +37,13 @@ const Property = () => {
   }, [property]);
 
   const handleBuy = async (priceInRLC) => {
-    console.log("Buy property");
-    await buyProperty(protectedDataAddress, priceInRLC, connector);
+    const txn = await buyProperty(
+      protectedDataAddress,
+      priceInRLC,
+      connector,
+      address
+    );
+    console.log(txn);
   };
 
   if (loading) {
@@ -49,81 +55,86 @@ const Property = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.visuals}>
-        <div
-          className={styles.imageCard}
-          style={{ backgroundImage: `url(${property.thumbnail})` }}
-        ></div>
-        <div className={styles.vid}></div>
-      </div>
-      <div className={styles.details}>
-        <h2>{metaData.title}</h2>
-        <section className={styles.info}>
-          <p>
-            <CalendarClock size={20} absoluteStrokeWidth />
-            {timestampToReadableDate(property.creationTimestamp)}
-          </p>
-          <p>
-            <User2 size={20} absoluteStrokeWidth />
-            {property.collection.owner.id}
-          </p>
-        </section>
-
-        <div className={styles.description}>
-          <h2>Description</h2>
-
-          <h3>Bedroom(s)</h3>
-          <p>{metaData.bedrooms}-Bedroom</p>
-
-          <h3>Location</h3>
-          <p>{metaData.location}</p>
-
-          <h3>Price (RLC)</h3>
-          <p>
-            {property.isForSale
-              ? Number(property.saleParams.price / 1e9)
-              : Number(property.rentalParams.price / 1e9)}
-          </p>
-
-          <h3>Description</h3>
-          <p>{metaData.description}</p>
+    <>
+      <ToastContainer />
+      <div className={styles.container}>
+        <div className={styles.visuals}>
+          <div
+            className={styles.imageCard}
+            style={{ backgroundImage: `url(${property.thumbnail})` }}
+          ></div>
+          <div className={styles.vid}></div>
         </div>
+        <div className={styles.details}>
+          <h2>{metaData.title}</h2>
+          <section className={styles.info}>
+            <p>
+              <CalendarClock size={20} absoluteStrokeWidth />
+              {timestampToReadableDate(property.creationTimestamp)}
+            </p>
+            <p>
+              <User2 size={20} absoluteStrokeWidth />
+              {property.collection.owner.id}
+            </p>
+          </section>
 
-        {address.toLowerCase() ===
-          property.collection.owner.id.toLowerCase() && (
-          <p>You own this property</p>
-        )}
-        {address.toLowerCase() !==
-          property.collection.owner.id.toLowerCase() && (
-          <div className={styles.actions}>
-            {property.isRentable && (
-              <Button
-                label={`Rent Property for ${secondsToDays(
-                  property.rentalParams.duration
-                )} days`}
-                btnClass="primary"
-                icon={<Shapes size={20} />}
-              />
-            )}
+          <div className={styles.description}>
+            <h2>Description</h2>
 
-            {property.isForSale && (
-              <Button
-                label={`Buy Property`}
-                btnClass="primary"
-                icon={<ShoppingBagIcon size={20} />}
-                handleClick={() => handleBuy(property.saleParams.price)}
-              />
-            )}
-            <Button
-              label="Contact Agent"
-              btnClass="secondary"
-              icon={<MailCheck size={20} />}
-            />
+            <h3>Bedroom(s)</h3>
+            <p>{metaData.bedrooms}-Bedroom</p>
+
+            <h3>Location</h3>
+            <p>{metaData.location}</p>
+
+            <h3>Price (RLC)</h3>
+            <p>
+              {property.isForSale
+                ? Number(property.saleParams.price / 1e9)
+                : Number(property.rentalParams.price / 1e9)}
+            </p>
+
+            <h3>Description</h3>
+            <p>{metaData.description}</p>
           </div>
-        )}
+
+          {address.toLowerCase() ===
+            property.collection.owner.id.toLowerCase() && (
+            <p>You own this property</p>
+          )}
+          {address.toLowerCase() !==
+            property.collection.owner.id.toLowerCase() && (
+            <div className={styles.actions}>
+              {property.isRentable && (
+                <Button
+                  label={`Rent Property for ${secondsToDays(
+                    property.rentalParams.duration
+                  )} days`}
+                  btnClass="primary"
+                  icon={<Shapes size={20} />}
+                />
+              )}
+
+              {property.isForSale && (
+                <Button
+                  label={`Buy Property`}
+                  btnClass="primary"
+                  icon={<ShoppingBagIcon size={20} />}
+                  handleClick={() =>
+                    handleBuy(Number(property.saleParams.price))
+                  }
+                />
+              )}
+              <Button
+                label="Contact Agent"
+                btnClass="secondary"
+                icon={<MailCheck size={20} />}
+              />
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
