@@ -31,9 +31,9 @@ const Property = () => {
   useEffect(() => {
     const PropertyData = property;
     const fetchMetaData = async () => {
-      const request = await fetch(PropertyData.metaData);
-      const response = await request.json();
-      setMetaData(response);
+      await fetch(PropertyData.metaData)
+        .then((response) => response.json())
+        .then((data) => setMetaData(data));
     };
 
     if (!loading) {
@@ -165,10 +165,10 @@ const Property = () => {
             </div>
           )}
 
-          {address?.toLowerCase() === property.renter.toLowerCase() && (
+          {address?.toLowerCase() === property.renter?.toLowerCase() && (
             <p>You own this property</p>
           )}
-          {address?.toLowerCase() !== property.renter.toLowerCase() && (
+          {address?.toLowerCase() !== property.renter?.toLowerCase() && (
             <div className={styles.actions}>
               {property.isRentable && (
                 <Button
