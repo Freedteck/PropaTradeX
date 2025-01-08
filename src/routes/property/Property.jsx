@@ -17,6 +17,7 @@ import { secondsToDays } from "../../utils/secondsToDays";
 import { useAccount } from "wagmi";
 import { buyProperty } from "../../modules/buyProperty";
 import { rentProperty } from "../../modules/rentProperty";
+import MessageModal from "../../components/messageModal/MessageModal";
 
 const Property = () => {
   const { protectedDataAddress } = useParams();
@@ -28,9 +29,9 @@ const Property = () => {
 
   const [isEditable, setIsEditable] = useState(false);
   const [renter, setRenter] = useState("false");
-  
-  const [tab, setTab] = useState("thumbnail")
+  const [openModal, setOpenModal] = useState(false);
 
+  const [tab, setTab] = useState("thumbnail");
 
   useEffect(() => {
     const PropertyData = property;
@@ -77,15 +78,10 @@ const Property = () => {
     );
     console.log(txn);
   };
-  
-  const handleVideoClick = () => {
-    
-    
-  }
-  
-  const handleImageClick = (thumbnail) => {
-    
-  }
+
+  const handleVideoClick = () => {};
+
+  const handleImageClick = (thumbnail) => {};
 
   if (loading) {
     return (
@@ -98,29 +94,35 @@ const Property = () => {
   return (
     <div className={styles.container}>
       <div className={styles.visuals}>
-        { tab === "thumbnail" ?
-        <div
-          className={styles.imageCard}
-          style={{ backgroundImage: `url(${property.thumbnail})` }}
-        ></div> :
-        <div className={styles.vid}>
-          <video
-          autoPlay
-          muted
-          loop
-          type="video/mp4"
-          src={property.video}/>
-        </div>
-        }
-        <div className={styles.thumbnailCardContainer}>
-          <div className={styles.thumbnailCard} style={{ backgroundImage: `url(${property.thumbnail})` }} onClick={() => setTab("thumbnail")}>
+        {tab === "thumbnail" ? (
+          <div
+            className={styles.imageCard}
+            style={{ backgroundImage: `url(${property.thumbnail})` }}
+          ></div>
+        ) : (
+          <div className={styles.vid}>
+            <video autoPlay muted loop type="video/mp4" src={property.video} />
           </div>
-          <div className={styles.thumbnailCard} style={{ backgroundImage: `url(${property.thumbnail})`, position: 'relative' }} onClick={() => setTab("video")}>
+        )}
+        <div className={styles.thumbnailCardContainer}>
+          <div
+            className={styles.thumbnailCard}
+            style={{ backgroundImage: `url(${property.thumbnail})` }}
+            onClick={() => setTab("thumbnail")}
+          ></div>
+          <div
+            className={styles.thumbnailCard}
+            style={{
+              backgroundImage: `url(${property.thumbnail})`,
+              position: "relative",
+            }}
+            onClick={() => setTab("video")}
+          >
             <div className={styles.videoThumbnail}>
               <Play />
             </div>
           </div>
-         </div>
+        </div>
       </div>
       <div className={styles.details}>
         <h2>{metaData.title}</h2>
@@ -197,10 +199,12 @@ const Property = () => {
               label="Contact Owner"
               btnClass="secondary"
               icon={<MailCheck size={20} />}
+              handleClick={() => setOpenModal(true)}
             />
           </div>
         )}
       </div>
+      {openModal && <MessageModal address={property.collection?.owner.id} />}
     </div>
   );
 };

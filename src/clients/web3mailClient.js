@@ -9,7 +9,7 @@ export const initWeb3mail = async ({ connector }) => {
     ipfsNode: import.meta.env.VITE_IPFS_NODE_URL,
   };
 
-  const web3mail = new IExecWeb3mail(provider, dataProtectorOptions);
+  const web3mail = new IExecWeb3mail(provider);
 
   return { web3mail };
 };

@@ -7,7 +7,7 @@ export async function grantAccess({ connector, protectedData }) {
     protectedData: protectedData,
     authorizedApp: "0x781482C39CcE25546583EaC4957Fb7Bf04C277D2",
     authorizedUser: "0x0000000000000000000000000000000000000000",
-    numberOfAccess: 10000,
+    numberOfAccess: 3,
     onStatusUpdate: ({ title, isDone }) => {
       console.log(title, isDone);
     },

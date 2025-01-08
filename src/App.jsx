@@ -6,7 +6,7 @@ import styles from "./App.module.css";
 import { initWeb3mail } from "./clients/web3mailClient";
 import { useAccount } from "wagmi";
 import InputModal from "./components/inputModal/InputModal";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { protectUserData } from "./modules/protectUserData";
 import { grantAccess } from "./modules/grantAccess";
 
@@ -51,39 +51,55 @@ const App = () => {
     getMyContacts();
   }, [connector, userAddress]);
 
-  const handleProtectData = async (email, name) => {
-    if (connector) {
-      const { address } = await protectUserData({ connector, email, name });
-      setProtectedDataAddress(address);
+  const protectAndGrantAccess = async (email, name) => {
+    if (!connector) {
+      toast.error("No connector found. Please connect your wallet.");
+      return;
     }
-  };
 
-  const handleGrantAccess = async () => {
-    console.log("Protected Data Address", protectedDataAddress);
+    try {
+      const { address } = await toast.promise(
+        protectUserData({ connector, email, name }),
+        {
+          pending: "Protecting data...",
+          success: "Data protected successfully!",
+          error: "Failed to protect data.",
+        },
+        {
+          position: "top-center",
+        }
+      );
 
-    if (connector) {
-      const { dataset } = await grantAccess({
-        connector,
-        protectedData: protectedDataAddress,
-      });
-      console.log("Dataset", dataset);
+      setProtectedDataAddress(address);
+
+      await toast.promise(
+        grantAccess({ connector, protectedData: address }),
+        {
+          pending: "Granting access...",
+          success: "Access granted successfully!",
+          error: "Failed to grant access.",
+        },
+        {
+          position: "top-center",
+        }
+      );
+
       setAccountFound(true);
+      return address;
+    } catch (error) {
+      console.error("Error during protect and grant access:", error);
     }
   };
 
   return (
     <div className={styles.app}>
       <ToastContainer />
-      {/* Only show modal when contacts have been fetched and account is not found */}
       {!loadingContacts && !accountFound && (
-        <InputModal
-          handleProtectData={handleProtectData}
-          handleGrantAccess={handleGrantAccess}
-        />
+        <InputModal handleProtectAndGrantAccess={protectAndGrantAccess} />
       )}
-      <Header />
+      <Header protectedDataAddress={protectedDataAddress} />
       <div className={styles.content}>
-        <Outlet />
+        <Outlet context={{ protectedDataAddress }} />
       </div>
       <Footer />
     </div>

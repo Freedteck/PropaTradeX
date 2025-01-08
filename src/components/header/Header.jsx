@@ -3,8 +3,9 @@ import styles from "./Header.module.css";
 import { ConnectKitButton } from "connectkit";
 import { useAccount } from "wagmi";
 import Button from "../button/Button";
+import { Lock } from "lucide-react";
 
-const Header = () => {
+const Header = ({ protectedDataAddress }) => {
   const { isConnected } = useAccount();
 
   return (
@@ -33,7 +34,16 @@ const Header = () => {
             </li>
           </ul>
         )}
-        <ConnectKitButton mode="light" />
+        <div className={styles.accounts}>
+          {isConnected && (
+            <p>
+              <Lock size={16} />
+              {protectedDataAddress.slice(0, 6)}...
+              {protectedDataAddress.slice(-4)}
+            </p>
+          )}
+          <ConnectKitButton mode="light" />
+        </div>
       </nav>
     </header>
   );

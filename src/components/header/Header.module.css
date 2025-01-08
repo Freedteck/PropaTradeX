@@ -37,3 +37,18 @@ header {
 .nav-list .active {
   color: var(--primary-color);
 }
+
+.accounts {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.accounts p {
+  font-size: 1rem;
+  color: var(--primary-text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: underline;
+}

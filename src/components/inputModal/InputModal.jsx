@@ -4,41 +4,18 @@ import styles from "./InputModal.module.css";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
-const InputModal = ({ handleProtectData, handleGrantAccess }) => {
+const InputModal = ({ handleProtectAndGrantAccess }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    try {
-      await toast.promise(
-        handleProtectData(email, name),
-        {
-          pending: "Protecting your data...",
-          success: "Data protected successfully",
-          error: "Failed to protect data",
-        },
-        {
-          position: "top-center",
-        }
-      );
-      await toast.promise(
-        handleGrantAccess(),
-        {
-          pending: "Granting access...",
-          success: "Access granted successfully",
-          error: "Failed to grant access please try again",
-        },
-        {
-          position: "top-center",
-        }
-      );
-    } catch (error) {
-      console.error("Error during submission:", error);
+    if (!email || !name) {
+      toast.error("Please enter your email and name to proceed.");
+      return;
     }
+    handleProtectAndGrantAccess(email, name);
   };
-
   return (
     <div className={styles.bg}>
       <form className={styles.modal}>
