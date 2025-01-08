@@ -10,6 +10,7 @@ export const getProtectedProperties = async (collectionIdArray, connector) => {
       const { protectedDataInCollection } =
         await dataProtectorSharing.getProtectedDataInCollections({
           collectionId,
+          createdAfterTimestamp: 1736110675,
           isDistributed: true,
         });
 

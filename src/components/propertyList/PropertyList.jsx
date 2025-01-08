@@ -33,8 +33,8 @@ const PropertyList = ({
         <p>No properties found</p>
       ) : (
         <ul className={styles.row}>
-          {properties.map((property) => (
-            <ProductCard key={property.id} data={property} />
+          {properties.map((property, index) => (
+            <ProductCard key={index} data={property} />
           ))}
         </ul>
       )}
