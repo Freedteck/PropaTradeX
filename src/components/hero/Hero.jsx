@@ -4,7 +4,7 @@ import styles from "./Hero.module.css";
 import { Avatar } from "connectkit";
 import bgImage from "../../assets/hero.jpg";
 
-const Hero = ({ isExplore }) => {
+const Hero = ({ isExplore, header="Find Your Dream Property"}) => {
   const { address } = useAccount();
 
   return (
@@ -17,7 +17,7 @@ const Hero = ({ isExplore }) => {
       }}
     >
       <div className={styles.heroContent}>
-        <h1>Find Your Dream Property</h1>
+        <h1>{header}</h1>
         {isExplore && (
           <p>
             Welcome to PropaTradeX, where your dream property awaits in every
