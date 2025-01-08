@@ -9,6 +9,7 @@ import {
   MailCheck,
   Shapes,
   ShoppingBagIcon,
+  Play,
   User2,
 } from "lucide-react";
 import { timestampToReadableDate } from "../../utils/timestampToReadableDate";
@@ -27,6 +28,9 @@ const Property = () => {
 
   const [isEditable, setIsEditable] = useState(false);
   const [renter, setRenter] = useState("false");
+  
+  const [tab, setTab] = useState("thumbnail")
+
 
   useEffect(() => {
     const PropertyData = property;
@@ -73,6 +77,15 @@ const Property = () => {
     );
     console.log(txn);
   };
+  
+  const handleVideoClick = () => {
+    
+    
+  }
+  
+  const handleImageClick = (thumbnail) => {
+    
+  }
 
   if (loading) {
     return (
@@ -85,11 +98,29 @@ const Property = () => {
   return (
     <div className={styles.container}>
       <div className={styles.visuals}>
+        { tab === "thumbnail" ?
         <div
           className={styles.imageCard}
           style={{ backgroundImage: `url(${property.thumbnail})` }}
-        ></div>
-        <div className={styles.vid}></div>
+        ></div> :
+        <div className={styles.vid}>
+          <video
+          autoPlay
+          muted
+          loop
+          type="video/mp4"
+          src={property.video}/>
+        </div>
+        }
+        <div className={styles.thumbnailCardContainer}>
+          <div className={styles.thumbnailCard} style={{ backgroundImage: `url(${property.thumbnail})` }} onClick={() => setTab("thumbnail")}>
+          </div>
+          <div className={styles.thumbnailCard} style={{ backgroundImage: `url(${property.thumbnail})`, position: 'relative' }} onClick={() => setTab("video")}>
+            <div className={styles.videoThumbnail}>
+              <Play />
+            </div>
+          </div>
+         </div>
       </div>
       <div className={styles.details}>
         <h2>{metaData.title}</h2>

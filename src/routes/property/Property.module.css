@@ -22,6 +22,17 @@
   background-size: cover;
   background-position: center;
 }
+.vid{
+  width: 100%;
+  height: 60vh;
+  border-radius: 12px;
+}
+
+.vid video{
+  width: 100%;
+  height: 60vh;
+  border-radius: 12px;
+}
 
 .details {
   display: flex;
@@ -90,4 +101,30 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.thumbnailCardContainer{
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.thumbnailCard {
+  width: 200px;
+  height: 150px;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+}
+
+.videoThumbnail {
+  width: 200px;
+  height: 150px;
+  border-radius: 12px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
