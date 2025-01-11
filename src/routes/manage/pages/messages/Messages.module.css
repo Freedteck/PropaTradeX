@@ -6,6 +6,24 @@
   padding: 1em;
 }
 
+.messages form {
+  display: flex;
+  gap: 1rem;
+  width: 80%;
+  margin: 0 auto;
+  background-color: var(--secondary-bg);
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  padding: 0.5rem 1rem;
+}
+
+.messages input {
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
 .messages Link {
   width: 100%;
   text-decoration: none;
