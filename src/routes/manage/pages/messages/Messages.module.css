@@ -29,6 +29,14 @@
   text-decoration: none;
 }
 
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  align-self: center;
+  color: var(--primary-color);
+}
 .chatItem {
   display: flex;
   flex-direction: row;

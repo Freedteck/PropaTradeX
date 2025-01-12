@@ -78,8 +78,5 @@ export const getProtectedProperties = async (collectionIdArray, connector) => {
   //         property.address !== "0x43ebd3dc37cbaa8a341a76c87c591efbaa317be6"
   //     );
 
-  //   console.log("Filtered Properties:", filteredProperties);
-  console.log("Properties with IPFS:", protectedProperties.flat());
-
   return protectedProperties.flat();
 };

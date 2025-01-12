@@ -8,6 +8,7 @@ import { Avatar } from "connectkit";
 import useFetchCollectionIds from "../../../../hooks/useFetchCollectionIds.jsx";
 import { getAllUsers } from "../../../../modules/getAllUsers.js";
 import MessageModal from "../../../../components/messageModal/MessageModal.jsx";
+import { Loader } from "lucide-react";
 
 const Messages = () => {
   const { address, connector } = useAccount();
@@ -17,13 +18,15 @@ const Messages = () => {
   const { collectionIds, loading } = useFetchCollectionIds();
   const [showModal, setShowModal] = useState(false);
   const [protectedDataAddress, setProtectedDataAddress] = useState("");
+  const [loadingContacts, setLoadingContacts] = useState(true);
 
   useEffect(() => {
     const fetchChats = async () => {
+      setLoadingContacts(true);
       if (contacts && !loading) {
         const allusers = await getAllUsers(collectionIds, connector, contacts);
-        setAllUsers(allusers.slice(0, allusers.length - 2));
-        console.log("All Users:", allusers.slice(0, allusers.length - 2));
+        setAllUsers(allusers);
+        setLoadingContacts(false);
       }
     };
     fetchChats();
@@ -47,40 +50,47 @@ const Messages = () => {
         />
         <Button label="Search" btnClass="primary" />
       </form>
-      {allUsers.map((user, index) => (
-        <div key={index} className={styles.chatItem}>
-          <section>
-            <div className={styles.avatar}>
-              <Avatar
-                size={80}
-                address={
-                  Array.isArray(user.userDetails) &&
-                  user.userDetails[0]?.address
+      {loadingContacts && <Loader size={40} className={styles.loader} />}
+      {!loadingContacts && allUsers.length === 0 && (
+        <p className={styles.noChats}>
+          You have no chats yet. Start a new chat by entering an address above
+        </p>
+      )}
+      {!loadingContacts &&
+        allUsers.map((user, index) => (
+          <div key={index} className={styles.chatItem}>
+            <section>
+              <div className={styles.avatar}>
+                <Avatar
+                  size={80}
+                  address={
+                    Array.isArray(user.userDetails) &&
+                    user.userDetails[0]?.address
+                  }
+                />
+              </div>
+              <div className={styles.chatInfo}>
+                <p className={styles.name}>
+                  {Array.isArray(user.userDetails) && user.userDetails[0]?.name}
+                </p>
+                <p className={styles.address}>
+                  {Array.isArray(user.userDetails) &&
+                    user.userDetails[0]?.address}
+                </p>
+              </div>
+              <Button
+                label="Chat"
+                btnClass="primary"
+                handleClick={(e) =>
+                  handleShowModal(
+                    Array.isArray(user.userDetails) &&
+                      user.userDetails[0]?.address
+                  )
                 }
               />
-            </div>
-            <div className={styles.chatInfo}>
-              <p className={styles.name}>
-                {Array.isArray(user.userDetails) && user.userDetails[0]?.name}
-              </p>
-              <p className={styles.address}>
-                {Array.isArray(user.userDetails) &&
-                  user.userDetails[0]?.address}
-              </p>
-            </div>
-            <Button
-              label="Chat"
-              btnClass="primary"
-              handleClick={(e) =>
-                handleShowModal(
-                  Array.isArray(user.userDetails) &&
-                    user.userDetails[0]?.address
-                )
-              }
-            />
-          </section>
-        </div>
-      ))}
+            </section>
+          </div>
+        ))}
 
       {showModal && (
         <MessageModal

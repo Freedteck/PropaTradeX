@@ -18,9 +18,7 @@ import Property from "./routes/property/Property.jsx";
 import NewProperty from "./routes/manage/pages/newProperty/NewProperty.jsx";
 import Monetize from "./routes/manage/pages/monetize/Monetize.jsx";
 import Messages from "./routes/manage/pages/messages/Messages.jsx";
-import Chat from "./routes/manage/pages/chat/Chat.jsx";
 import Profile from "./routes/manage/pages/profile/Profile.jsx";
-import EditProfile from "./routes/manage/pages/editprofile/EditProfile.jsx";
 
 globalThis.Buffer = Buffer;
 
@@ -67,12 +65,8 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "messages",
+            path: "users",
             element: <Messages />,
-          },
-          {
-              path: "messages/chat/:name",
-            element: <Chat />,
           },
           {
             path: "new",
@@ -86,10 +80,6 @@ const router = createBrowserRouter([
           {
             path: "profile",
             element: <Profile />,
-          },
-          {
-            path: "profile/edit",
-            element: <EditProfile />,
           },
         ],
       },
