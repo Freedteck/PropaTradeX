@@ -122,7 +122,7 @@ const Property = () => {
       const { taskId, result } =
         await dataProtectorSharing.consumeProtectedData({
           app: import.meta.env.VITE_PROTECTED_DATA_DELIVERY_DAPP_ADDRESS,
-          protectedData: protectedDataAddress.toLowerCase(),
+          protectedData: protectedDataAddress,
           path: "content",
           workerpool: import.meta.env.VITE_WORKERPOOL_ADDRESS,
           onStatusUpdate: handleConsumeStatuses,
@@ -368,10 +368,10 @@ const Property = () => {
           )}
 
           {renter && !contentAsObjectURL && (
-            <p onClick={consumeData} className={styles.thanks}>
+            <p className={styles.thanks}>
               Thank you for renting this property. You can now Download and view
               the receipt of your rental.
-              <span onClick={downloadFile} className={styles.download}>
+              <span onClick={consumeData} className={styles.download}>
                 Download Receipt
                 <DownloadCloud size={20} />
               </span>
@@ -383,7 +383,15 @@ const Property = () => {
         property.collection?.owner.id.toLowerCase() ? (
           <p>You own this property</p>
         ) : renter ? (
-          <p>You have rented this property</p>
+          <div className={styles.actions}>
+            <p>You have rented this property</p>
+            <Button
+              label="Contact Owner"
+              btnClass="secondary"
+              icon={<MailCheck size={20} />}
+              handleClick={() => setOpenModal(true)}
+            />
+          </div>
         ) : (
           <div className={styles.actions}>
             {property.isRentable && (

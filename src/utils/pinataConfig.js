@@ -5,8 +5,7 @@ export const pinata = new PinataSDK({
   pinataGateway: `${import.meta.env.VITE_GATEWAY_URL}`,
 });
 
-export const pinataMessage = new PinataSDK({
-  pinataJwt: `${import.meta.env.VITE_PINATA_MESSAGE_JWT}`,
-  pinataGateway: `${import.meta.env.VITE_MESSAGE_GATEWAY_URL}`,
-});
-
+// export const pinataMessage = new PinataSDK({
+//   pinataJwt: `${import.meta.env.VITE_PINATA_MESSAGE_JWT}`,
+//   pinataGateway: `${import.meta.env.VITE_MESSAGE_GATEWAY_URL}`,
+// });
