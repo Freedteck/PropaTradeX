@@ -25,8 +25,9 @@ const Messages = () => {
       setLoadingContacts(true);
       if (contacts && !loading) {
         const allusers = await getAllUsers(collectionIds, connector, contacts);
-        setAllUsers(allusers);
+        setAllUsers(allusers.slice(0, allusers.length - 2));
         setLoadingContacts(false);
+        console.log(allusers);
       }
     };
     fetchChats();
