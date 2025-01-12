@@ -9,6 +9,8 @@ import useFetchCollectionIds from "../../hooks/useFetchCollectionIds";
 
 const Home = () => {
   const [properties, setProperties] = useState([]);
+  const [isPropertiesLoading, setIsPropertiesLoading] = useState(true);
+  const [isPropertiesError, setIsPropertiesError] = useState(false);
   const { collectionIds, loading } = useFetchCollectionIds();
   const { connector, isConnected } = useAccount();
 
@@ -18,13 +20,18 @@ const Home = () => {
 
   useEffect(() => {
     const fetchProperties = async () => {
-      if (!loading) {
+      setIsPropertiesLoading(true);
+      if (connector && !loading) {
         const protectedProperties = await getProtectedProperties(
           collectionIds,
           connector
         );
 
         setProperties(protectedProperties);
+        setIsPropertiesLoading(false);
+      } else {
+        setIsPropertiesLoading(false);
+        setIsPropertiesError(true);
       }
     };
 
@@ -37,7 +44,8 @@ const Home = () => {
         <PropertyList
           properties={properties.slice(-3)}
           heading={"New Properties"}
-          loading={loading}
+          loading={isPropertiesLoading}
+          error={isPropertiesError}
           desc={
             "Discover the latest properties available for rent or sale in variouslocations."
           }
@@ -48,7 +56,8 @@ const Home = () => {
         <div className={styles.rent}>
           <PropertyList
             properties={propertiesForRent.slice(0, 4)}
-            loading={loading}
+            loading={isPropertiesLoading}
+            error={isPropertiesError}
             heading={"For Rent"}
             desc={
               "Discover the latest properties available for rent in various locations."

@@ -3,19 +3,21 @@ import ProductCard from "../../../../../components/propertyCard/ProductCard";
 import PropTypes from "prop-types";
 import styles from "./Properties.module.css";
 import { LoaderIcon } from "lucide-react";
-import useFetchCollectionIds from "../../../../../hooks/useFetchCollectionIds";
 import { useAccount } from "wagmi";
 import { getUserProtectedProperties } from "../../../../../modules/getUserProtectedProperty";
 import { getRentals } from "../../../../../modules/getRentals";
 
 const Properties = ({ propertyType }) => {
   const [properties, setProperties] = useState([]);
-  const { collectionIds, loading } = useFetchCollectionIds();
-  const { connector, address } = useAccount();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { connector, address, isConnected } = useAccount();
 
   useEffect(() => {
     const fetchProperties = async () => {
-      if (!loading) {
+      setLoading(true);
+      setError(null);
+      if (connector && isConnected) {
         const protectedProperties = await getUserProtectedProperties(
           address,
           connector
@@ -28,19 +30,18 @@ const Properties = ({ propertyType }) => {
           console.log(propertiesForRent);
 
           setProperties(propertiesForRent);
-        } else if (propertyType === "purchase") {
-          const propertiesForSale = protectedProperties.filter(
-            (property) => property.isForSale === true
-          );
-          setProperties(propertiesForSale);
         } else {
           setProperties(protectedProperties);
         }
+
+        setLoading(false);
+      } else {
+        setError("No account found or not connected");
       }
     };
 
     fetchProperties();
-  }, [loading, connector, address, propertyType]);
+  }, [connector, address, propertyType, isConnected]);
 
   const setHeadingAndDescription = () => {
     if (propertyType === "rent") {
@@ -71,15 +72,17 @@ const Properties = ({ propertyType }) => {
         <div className={styles.loader}>
           <LoaderIcon size={48} />
         </div>
-      ) : properties.length === 0 ? (
-        <p>No properties found</p>
-      ) : (
+      ) : properties.length > 0 ? (
         <div className={styles.container}>
-          {properties.map((property) => (
-            <ProductCard key={property.id} data={property} />
+          {properties.map((property, index) => (
+            <ProductCard key={index} data={property} />
           ))}
         </div>
+      ) : (
+        <p>No properties found</p>
       )}
+
+      {error && <p>{error}</p>}
     </div>
   );
 };

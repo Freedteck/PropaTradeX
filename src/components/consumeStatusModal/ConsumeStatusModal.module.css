@@ -20,43 +20,33 @@
   gap: 1rem;
   max-width: 500px;
   width: 100%;
+
   background-color: var(--primary-bg);
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   padding: 2rem;
-  position: relative;
 }
 
-.close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  cursor: pointer;
-}
-
-.modal fieldset {
-  border: none;
+.message {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 1rem;
+  font-size: 1.2rem;
   width: 100%;
 }
 
-.modal p {
-  font-size: 1rem;
+.success {
+  color: var(--primary-color);
+}
+
+.error {
+  color: #ff0000;
+}
+
+.loading {
   color: var(--secondary-text);
 }
 
-.modal label {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.modal input,
-.modal textarea {
-  background-color: var(--secondary-bg);
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
-  padding: 1rem;
+.message p {
+  flex: 1;
 }

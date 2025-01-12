@@ -3,9 +3,10 @@ import Button from "../button/Button";
 import styles from "./MessageModal.module.css";
 import { sendEmail } from "../../modules/sendEmail";
 import { useAccount } from "wagmi";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import { X } from "lucide-react";
 
-const MessageModal = ({ address }) => {
+const MessageModal = ({ address, handleClose }) => {
   const [name, setName] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -17,7 +18,7 @@ const MessageModal = ({ address }) => {
       const { taskId } = await toast.promise(
         sendEmail({
           connector,
-          protectedData: "0x4c4efe261f70c39b43c889cdf5e794f7add29c53",
+          protectedData: address,
           emailSubject: subject,
           emailContent: message,
           senderName: name,
@@ -32,6 +33,8 @@ const MessageModal = ({ address }) => {
         }
       );
 
+      handleClose();
+
       console.log("Email sent with taskId:", taskId);
     } catch (error) {
       console.error("Error sending email:", error);
@@ -41,8 +44,13 @@ const MessageModal = ({ address }) => {
     }
   };
   return (
-    <div className={styles.bg}>
+    <div
+      className={styles.bg}
+      onClick={(e) => e.target.className === styles.bg && handleClose()}
+    >
+      <ToastContainer />
       <form className={styles.modal}>
+        <X className={styles.close} onClick={handleClose} />
         <fieldset>
           <div>
             <h2>Send a Message</h2>

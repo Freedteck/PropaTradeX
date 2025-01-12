@@ -4,7 +4,6 @@ import styles from "./Overview.module.css";
 import Button from "../../../../components/button/Button";
 
 const Overview = () => {
-
   return (
     <div>
       <Hero />
@@ -25,14 +24,6 @@ const Overview = () => {
               className={({ isActive }) => (isActive ? styles.active : "")}
             >
               Rent
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/manage/properties/purchase"
-              className={({ isActive }) => (isActive ? styles.active : "")}
-            >
-              Purchase
             </NavLink>
           </li>
         </ul>

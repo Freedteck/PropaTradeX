@@ -12,6 +12,9 @@ export const buyProperty = async (
   const collectionId = await getOrCreateCollection({
     connector,
     ownerAddress: ownerAddress,
+    onStatusUpdate: ({ title, isDone }) => {
+      console.log(title, isDone);
+    },
   });
 
   const { dataProtectorSharing } = await initDataProtectorSDK({ connector });

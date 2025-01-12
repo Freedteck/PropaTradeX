@@ -9,9 +9,18 @@ export const getRentals = async (connector, userAddress) => {
     includePastRentals: false,
   });
   console.log("Rentals", rentals);
+
+  const latestRentals = rentals.filter((protectedData) => {
+    return (
+      protectedData.creationTimestamp * 1000 >
+      new Date(1736673395 * 1000).getTime()
+    );
+  });
+
+  console.log("Latest rentals", latestRentals);
   // Fetch IPFS details for each property
   const rentalsWithIpfs = await Promise.all(
-    rentals.map(async (property) => {
+    latestRentals.map(async (property) => {
       try {
         // List files from Pinata by name and pin start time
         const pinataFiles = await pinata

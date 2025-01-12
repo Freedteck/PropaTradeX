@@ -64,10 +64,6 @@ const router = createBrowserRouter([
                 path: "rent",
                 element: <Properties propertyType={"rent"} />,
               },
-              {
-                path: "purchase",
-                element: <Properties propertyType={"purchase"} />,
-              },
             ],
           },
           {
@@ -91,10 +87,10 @@ const router = createBrowserRouter([
             path: "profile",
             element: <Profile />,
           },
-         {
+          {
             path: "profile/edit",
             element: <EditProfile />,
-          } 
+          },
         ],
       },
     ],

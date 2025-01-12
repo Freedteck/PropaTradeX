@@ -3,23 +3,28 @@ import { initDataProtectorSDK } from "../clients/dataProtectorClient";
 
 export async function createProtectedData({
   connector,
-  propertyDoc,
+  // propertyDoc,
   receipt,
   propertyTitle,
   onStatusUpdate,
 }) {
   const { dataProtectorCore } = await initDataProtectorSDK({ connector });
 
-  const propertyDocAsArrayBuffer = await createArrayBufferFromFile(propertyDoc);
+  // const propertyDocAsArrayBuffer = await createArrayBufferFromFile(propertyDoc);
   const receiptAsArrayBuffer = await createArrayBufferFromFile(receipt);
 
-  const reduceArray = (array) =>
-    array.reduce((accumulator, current, i) => {
-      accumulator[i] = current;
-      return accumulator;
-    }, {});
+  // console.log("Property doc as array buffer", propertyDocAsArrayBuffer);
+  // console.log("Receipt as array buffer", receiptAsArrayBuffer);
 
-  const filesArray = [propertyDocAsArrayBuffer, receiptAsArrayBuffer];
+  // const reduceArray = (array) =>
+  //   array.reduce((accumulator, current, i) => {
+  //     accumulator[i] = current;
+  //     return accumulator;
+  //   }, {});
+
+  // const filesArray = [propertyDocAsArrayBuffer, receiptAsArrayBuffer];
+
+  // console.log("Files array", filesArray);
 
   onStatusUpdate({
     title: "Create protected data into DataProtector registry smart-contract",
@@ -27,7 +32,7 @@ export async function createProtectedData({
   });
 
   return dataProtectorCore.protectData({
-    data: { files: reduceArray(filesArray) },
+    data: { file: receiptAsArrayBuffer },
     name: propertyTitle,
     onStatusUpdate: (status) => {
       keepInterestingStatusUpdates(onStatusUpdate, status);

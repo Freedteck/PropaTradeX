@@ -9,17 +9,18 @@ import InputModal from "./components/inputModal/InputModal";
 import { toast, ToastContainer } from "react-toastify";
 import { protectUserData } from "./modules/protectUserData";
 import { grantAccess } from "./modules/grantAccess";
+import { ProtectedDataContext } from "./context/ProtectedDataContext";
 
 const App = () => {
   const [contacts, setContacts] = useState([]);
   const { connector, address: userAddress } = useAccount();
   const [accountFound, setAccountFound] = useState(false);
   const [protectedDataAddress, setProtectedDataAddress] = useState("");
-  const [loadingContacts, setLoadingContacts] = useState(true); // Add loading state
+  const [loadingContacts, setLoadingContacts] = useState(true);
 
   useEffect(() => {
     const getMyContacts = async () => {
-      setLoadingContacts(true); // Start loading
+      setLoadingContacts(true);
       try {
         if (connector && userAddress) {
           const { web3mail } = await initWeb3mail({ connector });
@@ -41,7 +42,7 @@ const App = () => {
 
           setContacts(contacts);
           console.log("Contacts", contacts);
-          setLoadingContacts(false); // Stop loading
+          setLoadingContacts(false);
         }
       } catch (error) {
         console.error("Error fetching contacts:", error);
@@ -92,17 +93,19 @@ const App = () => {
   };
 
   return (
-    <div className={styles.app}>
-      <ToastContainer />
-      {!loadingContacts && !accountFound && (
-        <InputModal handleProtectAndGrantAccess={protectAndGrantAccess} />
-      )}
-      <Header protectedDataAddress={protectedDataAddress} />
-      <div className={styles.content}>
-        <Outlet context={{ protectedDataAddress }} />
+    <ProtectedDataContext.Provider value={{ protectedDataAddress, contacts }}>
+      <div className={styles.app}>
+        <ToastContainer />
+        {!loadingContacts && !accountFound && (
+          <InputModal handleProtectAndGrantAccess={protectAndGrantAccess} />
+        )}
+        <Header protectedDataAddress={protectedDataAddress} />
+        <div className={styles.content}>
+          <Outlet />
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </ProtectedDataContext.Provider>
   );
 };
 

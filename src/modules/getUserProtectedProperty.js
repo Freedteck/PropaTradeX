@@ -13,8 +13,8 @@ export const getUserProtectedProperties = async (ownerAddress, connector) => {
   const latestProtectedData = protectedDataInCollection.filter(
     (protectedData) => {
       return (
-        protectedData.creationTimestamp * 1000 >=
-        new Date(1736075130 * 1000).getTime()
+        protectedData.creationTimestamp * 1000 >
+        new Date(1736668255 * 1000).getTime()
       );
     }
   );

@@ -70,7 +70,7 @@ const Upload = ({
             {property.thumbnail ? (
               <p>{property.thumbnail.name}</p>
             ) : (
-              <p>Upload a single JPG/PNG image. Max size: 10MB.</p>
+              <p>Upload a single JPG/PNG image. Max size: 2MB.</p>
             )}
           </div>
           <input
@@ -91,7 +91,7 @@ const Upload = ({
             {property.video ? (
               <p>{property.video.name}</p>
             ) : (
-              <p>Upload a video walkthrough (MP4). Max size: 50MB.</p>
+              <p>Upload a video walkthrough (MP4). Max size: 3MB.</p>
             )}
           </div>
           <input
@@ -114,7 +114,7 @@ const Upload = ({
             {property.document ? (
               <p>{property.document.name}</p>
             ) : (
-              <p>Upload a legal document (PDF). Max size: 10MB.</p>
+              <p>Upload a legal document (PDF). Max size: 2MB.</p>
             )}
           </div>
           <input
@@ -135,7 +135,7 @@ const Upload = ({
             {property.receipt ? (
               <p>{property.receipt.name}</p>
             ) : (
-              <p>Upload a receipt for the transaction (PDF). Max size: 10MB.</p>
+              <p>Upload a receipt for the transaction (PDF). Max size: 2MB.</p>
             )}
           </div>
           <input

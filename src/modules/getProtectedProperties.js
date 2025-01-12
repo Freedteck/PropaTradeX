@@ -10,7 +10,7 @@ export const getProtectedProperties = async (collectionIdArray, connector) => {
       const { protectedDataInCollection } =
         await dataProtectorSharing.getProtectedDataInCollections({
           collectionId,
-          // createdAfterTimestamp: 1736110675,
+          createdAfterTimestamp: 1736668255,
           isDistributed: true,
         });
 
@@ -18,7 +18,7 @@ export const getProtectedProperties = async (collectionIdArray, connector) => {
         (protectedData) => {
           return (
             protectedData.creationTimestamp * 1000 >=
-            new Date(1736075130 * 1000).getTime()
+            new Date(1736668255 * 1000).getTime()
           );
         }
       );

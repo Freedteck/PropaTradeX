@@ -7,6 +7,7 @@ import { LoaderIcon } from "lucide-react";
 const PropertyList = ({
   properties,
   loading,
+  error,
   heading,
   desc,
   feature,
@@ -29,15 +30,17 @@ const PropertyList = ({
         <div className={styles.loader}>
           <LoaderIcon size={48} />
         </div>
-      ) : properties.length === 0 ? (
-        <p>No properties found</p>
-      ) : (
-        <ul className={styles.row}>
+      ) : properties.length > 0 ? (
+        <div className={styles.row}>
           {properties.map((property, index) => (
             <ProductCard key={index} data={property} />
           ))}
-        </ul>
+        </div>
+      ) : (
+        <p>No properties found</p>
       )}
+
+      {error && <p>{error}</p>}
     </section>
   );
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from "./NewProperty.module.css";
 import Upload from "../../../../components/upload/Upload";
 import { createProtectedData } from "../../../../modules/createProtectedData";
@@ -9,6 +9,7 @@ import StatusModal from "../../../../components/statusModal/StatusModal";
 import { initDataProtectorSDK } from "../../../../clients/dataProtectorClient";
 import useFetchCollectionIds from "../../../../hooks/useFetchCollectionIds";
 import { toast, ToastContainer } from "react-toastify";
+import { ProtectedDataContext } from "../../../../context/ProtectedDataContext";
 
 // const FILE_SIZE_LIMIT_IN_KB = 500;
 const FILE_SIZE_LIMIT_IN_KB = 10_000;
@@ -36,6 +37,7 @@ function NewProperty() {
   const { connector, address: ownerAddress } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
   const { collectionIds } = useFetchCollectionIds();
+  const { protectedDataAddress } = useContext(ProtectedDataContext);
 
   const handleStatusUpdate = (status) => {
     setStatus(status);
@@ -88,8 +90,7 @@ function NewProperty() {
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     const { name } = e.target;
-
-    console.log("File uploaded", name);
+    console.log(e?.target?.files?.[0]);
 
     if (!file) return;
 
@@ -168,6 +169,7 @@ function NewProperty() {
             description,
             location,
             bedrooms,
+            protectedDataAddress,
           },
           { metadata: { name: title } }
         );
@@ -187,10 +189,12 @@ function NewProperty() {
         }
       );
 
+      console.log(document, receipt);
+
       const { address } = await createProtectedData({
         connector,
-        propertyDoc: document,
-        receipt,
+        // propertyDoc: document,
+        receipt: receipt,
         propertyTitle: title,
         onStatusUpdate: handleStatusUpdate,
       });
