@@ -1,4 +1,4 @@
-.messages{
+.messages {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -9,7 +9,7 @@
 .messages form {
   display: flex;
   gap: 1rem;
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
   background-color: var(--secondary-bg);
   border-radius: 12px;
@@ -17,7 +17,7 @@
   padding: 0.5rem 1rem;
 }
 
-.messages input {
+.messages .input {
   flex: 1;
   border: none;
   background-color: transparent;
@@ -38,6 +38,14 @@
   cursor: pointer;
 }
 
+.chatItem section {
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .chatItem:hover {
   background-color: var(--secondary-bg);
 }
@@ -45,22 +53,17 @@
 .chatInfo {
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
   flex: 1;
+  color: white;
 }
 
 .chatInfo .name {
   font-size: 1rem;
   font-weight: bold;
-  color: black;
 }
 
-.chatInfo .lastMessage {
-  font-size: 1rem;
-  color: #a1a1a1;
-}
-
-.chatInfo span{
-  font-size: 0.75rem;
-  color: #a1a1a1;
-  text-align: right;
+.address {
+  font-size: 0.8rem;
+  color: #b0b0b0;
 }
