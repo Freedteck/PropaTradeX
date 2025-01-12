@@ -20,7 +20,6 @@ function NewProperty() {
   const [location, setLocation] = useState("");
   const [bedrooms, setBedrooms] = useState(1);
   const [thumbnail, setThumbnail] = useState(null);
-  const [document, setDocument] = useState(null);
   const [receipt, setReceipt] = useState(null);
   const [video, setVideo] = useState(null);
   const [status, setStatus] = useState({
@@ -62,7 +61,6 @@ function NewProperty() {
     setLocation("");
     setBedrooms(1);
     setThumbnail(null);
-    setDocument(null);
     setReceipt(null);
     setVideo(null);
   };
@@ -90,16 +88,12 @@ function NewProperty() {
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     const { name } = e.target;
-    console.log(e?.target?.files?.[0]);
 
     if (!file) return;
 
     switch (name) {
       case "thumbnail":
         setThumbnail(file);
-        break;
-      case "document":
-        setDocument(file);
         break;
       case "receipt":
         setReceipt(file);
@@ -120,7 +114,6 @@ function NewProperty() {
       !location ||
       !bedrooms ||
       !thumbnail ||
-      !document ||
       !receipt ||
       !video
     ) {
@@ -130,7 +123,7 @@ function NewProperty() {
     }
 
     // Check file sizes for each file
-    const files = [thumbnail, document, receipt, video];
+    const files = [thumbnail, receipt, video];
     const filesTooLarge = files.filter(
       (file) => file.size > FILE_SIZE_LIMIT_IN_KB * 1024
     );
@@ -189,11 +182,8 @@ function NewProperty() {
         }
       );
 
-      console.log(document, receipt);
-
       const { address } = await createProtectedData({
         connector,
-        // propertyDoc: document,
         receipt: receipt,
         propertyTitle: title,
         onStatusUpdate: handleStatusUpdate,
@@ -208,12 +198,9 @@ function NewProperty() {
         onStatusUpdate: handleStatusUpdate,
       });
 
-      console.log("Collection ID", collectionId);
-
       if (!collectionIds.includes(collectionId)) {
         const addCidTOCollection = async () => {
           const collectionIdCid = await pinata.upload.json({ collectionId });
-          console.log("Collection ID CID", collectionIdCid);
 
           const addCidToGroup = await pinata.groups.addCids({
             groupId: import.meta.env.VITE_PINATA_COLLECTION_ID,
@@ -284,7 +271,6 @@ function NewProperty() {
             location,
             bedrooms,
             thumbnail,
-            document,
             receipt,
             video,
           }}

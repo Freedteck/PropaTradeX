@@ -32,16 +32,13 @@ const App = () => {
           );
 
           if (myAccount) {
-            console.log("My Account", myAccount);
             setAccountFound(true);
             setProtectedDataAddress(myAccount.address);
           } else {
-            console.log("Account not found");
             setAccountFound(false);
           }
 
           setContacts(contacts);
-          console.log("Contacts", contacts);
           setLoadingContacts(false);
         }
       } catch (error) {

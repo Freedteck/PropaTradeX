@@ -23,11 +23,8 @@ const Properties = ({ propertyType }) => {
           connector
         );
 
-        console.log(protectedProperties);
-
         if (propertyType === "rent") {
           const propertiesForRent = await getRentals(connector, address);
-          console.log(propertiesForRent);
 
           setProperties(propertiesForRent);
         } else {

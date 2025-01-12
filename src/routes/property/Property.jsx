@@ -55,12 +55,6 @@ const Property = () => {
         .then((data) => setMetaData(data));
     };
 
-    console.log(address);
-
-    if (!loading) {
-      console.log("property", property);
-    }
-
     fetchMetaData();
   }, [property, address, loading]);
 
@@ -78,8 +72,6 @@ const Property = () => {
     } else {
       setRenter(false);
     }
-
-    console.log("thisOwner", thisOwner);
   }, [property.isForSale, property.isRentable, property.rentals, address]);
 
   useEffect(() => {
@@ -292,7 +284,14 @@ const Property = () => {
           ></div>
         ) : (
           <div className={styles.vid}>
-            <video autoPlay muted loop controls type="video/mp4" src={property.video} />
+            <video
+              autoPlay
+              muted
+              loop
+              controls
+              type="video/mp4"
+              src={property.video}
+            />
           </div>
         )}
         <div className={styles.thumbnailCardContainer}>

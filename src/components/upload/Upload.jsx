@@ -106,27 +106,6 @@ const Upload = ({
       </section>
 
       <section>
-        {/* Document Upload */}
-        <label className={styles.fileLabel}>
-          <UploadCloud size={48} absoluteStrokeWidth />
-          <div>
-            <h3>Property Document</h3>
-            {property.document ? (
-              <p>{property.document.name}</p>
-            ) : (
-              <p>Upload a legal document (PDF). Max size: 2MB.</p>
-            )}
-          </div>
-          <input
-            className={styles.fileInput}
-            type="file"
-            name="document"
-            accept=".pdf"
-            required
-            onChange={(e) => handleFileUpload(e)}
-          />
-        </label>
-
         {/* Receipt Upload */}
         <label className={styles.fileLabel}>
           <UploadCloud size={48} absoluteStrokeWidth />
@@ -135,7 +114,7 @@ const Upload = ({
             {property.receipt ? (
               <p>{property.receipt.name}</p>
             ) : (
-              <p>Upload a receipt for the transaction (PDF). Max size: 2MB.</p>
+              <p>Upload a receipt for the property (PDF). Max size: 2MB.</p>
             )}
           </div>
           <input
