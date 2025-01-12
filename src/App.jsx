@@ -10,6 +10,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { protectUserData } from "./modules/protectUserData";
 import { grantAccess } from "./modules/grantAccess";
 import { ProtectedDataContext } from "./context/ProtectedDataContext";
+import { ThemeContext } from "./context/ThemeContext";
 
 const App = () => {
   const [contacts, setContacts] = useState([]);
@@ -17,6 +18,11 @@ const App = () => {
   const [accountFound, setAccountFound] = useState(false);
   const [protectedDataAddress, setProtectedDataAddress] = useState("");
   const [loadingContacts, setLoadingContacts] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  const toggleTheme = () => {
+    setIsDarkMode((prev) => !prev);
+  };
 
   useEffect(() => {
     const getMyContacts = async () => {
@@ -90,19 +96,21 @@ const App = () => {
   };
 
   return (
-    <ProtectedDataContext.Provider value={{ protectedDataAddress, contacts }}>
-      <div className={styles.app}>
-        <ToastContainer />
-        {!loadingContacts && !accountFound && (
-          <InputModal handleProtectAndGrantAccess={protectAndGrantAccess} />
-        )}
-        <Header protectedDataAddress={protectedDataAddress} />
-        <div className={styles.content}>
-          <Outlet />
+    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
+      <ProtectedDataContext.Provider value={{ protectedDataAddress, contacts }}>
+        <div className={styles.app}>
+          <ToastContainer />
+          {!loadingContacts && !accountFound && (
+            <InputModal handleProtectAndGrantAccess={protectAndGrantAccess} />
+          )}
+          <Header protectedDataAddress={protectedDataAddress} />
+          <div className={styles.content}>
+            <Outlet />
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </ProtectedDataContext.Provider>
+      </ProtectedDataContext.Provider>
+    </ThemeContext.Provider>
   );
 };
 

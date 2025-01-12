@@ -3,10 +3,23 @@ import styles from "./Header.module.css";
 import { ConnectKitButton } from "connectkit";
 import { useAccount } from "wagmi";
 import Button from "../button/Button";
-import { Lock } from "lucide-react";
+import { Lock, Moon, Sun } from "lucide-react";
+import { useContext, useEffect } from "react";
+import { ThemeContext } from "../../context/ThemeContext";
 
 const Header = ({ protectedDataAddress }) => {
   const { isConnected } = useAccount();
+  const { isDarkMode, toggleTheme } = useContext(ThemeContext);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add("dark-theme");
+      document.body.classList.remove("light-theme");
+    } else {
+      document.body.classList.add("light-theme");
+      document.body.classList.remove("dark-theme");
+    }
+  }, [isDarkMode]);
 
   return (
     <header>
@@ -42,7 +55,11 @@ const Header = ({ protectedDataAddress }) => {
               {protectedDataAddress.slice(-4)}
             </p>
           )}
-          <ConnectKitButton mode="light" />
+          <ConnectKitButton mode={`${isDarkMode ? "dark" : "light"}`} />
+          {/* Toggle Theme */}
+          <div onClick={toggleTheme} className={styles["theme-toggle"]}>
+            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </div>
         </div>
       </nav>
     </header>
