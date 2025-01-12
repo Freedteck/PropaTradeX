@@ -383,7 +383,15 @@ const Property = () => {
         property.collection?.owner.id.toLowerCase() ? (
           <p>You own this property</p>
         ) : renter ? (
-          <p>You have rented this property</p>
+          <div className={styles.actions}>
+            <p>You have rented this property</p>
+            <Button
+              label="Contact Owner"
+              btnClass="secondary"
+              icon={<MailCheck size={20} />}
+              handleClick={() => setOpenModal(true)}
+            />
+          </div>
         ) : (
           <div className={styles.actions}>
             {property.isRentable && (
