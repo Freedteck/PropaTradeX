@@ -368,10 +368,10 @@ const Property = () => {
           )}
 
           {renter && !contentAsObjectURL && (
-            <p onClick={consumeData} className={styles.thanks}>
+            <p className={styles.thanks}>
               Thank you for renting this property. You can now Download and view
               the receipt of your rental.
-              <span onClick={downloadFile} className={styles.download}>
+              <span onClick={consumeData} className={styles.download}>
                 Download Receipt
                 <DownloadCloud size={20} />
               </span>
