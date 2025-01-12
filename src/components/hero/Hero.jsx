@@ -2,9 +2,9 @@ import { useAccount, useEnsAvatar } from "wagmi";
 import Button from "../button/Button";
 import styles from "./Hero.module.css";
 import { Avatar } from "connectkit";
-import bgImage from "../../assets/hero.jpg";
+import bgImage from "../../assets/bg.jpeg";
 
-const Hero = ({ isExplore, header="Find Your Dream Property"}) => {
+const Hero = ({ isExplore, header = "Find Your Dream Property" }) => {
   const { address } = useAccount();
 
   return (
