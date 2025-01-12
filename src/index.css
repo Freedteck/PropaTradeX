@@ -41,6 +41,11 @@ body {
   background-color: var(--primary-bg);
 }
 
+input,
+textarea {
+  color: inherit;
+}
+
 /* Theming */
 
 /* @media (prefers-color-scheme: dark) {
