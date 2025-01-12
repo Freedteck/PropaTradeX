@@ -292,7 +292,7 @@ const Property = () => {
           ></div>
         ) : (
           <div className={styles.vid}>
-            <video autoPlay muted loop type="video/mp4" src={property.video} />
+            <video autoPlay muted loop controls type="video/mp4" src={property.video} />
           </div>
         )}
         <div className={styles.thumbnailCardContainer}>

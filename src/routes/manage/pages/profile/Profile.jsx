@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import styles from './Profile.module.css'
 import { useNavigate } from "react-router-dom";
+import { useAccount} from "wagmi";
+import { Avatar } from "connectkit";
+import Button from "../../../../components/button/Button";
 
 const Profile = () => {
     const navigate = useNavigate()
+    const { address } = useAccount()
     const [userData, setUserData] = useState({
         name: "",
         address: "",
@@ -16,20 +20,12 @@ const Profile = () => {
       
   return (
     <div className={styles.profilePage}>
-      
       <div className={styles.profileHeader}>
-        <div className={styles.profileImage}></div>
-        <h2>{userData.name || "Unnamed User"}</h2>
-        <p className={styles.address}>{userData.address || "No Address Found"}</p>
+        <Avatar address={address} size={80} />
+        <p className={styles.address}>{address}</p>
       </div>
-      <button
-            className={styles.editButton}
-            onClick={() => navigate("/manage/profile/edit")}
-          >
-            Edit Profile
-          </button>
+      <Button label="Edit Profile" btnClass="primary" handleClick={() => navigate("/manage/profile/edit")} />
 
-      
       <div className={styles.profileStats}>
         <h3>Subscription</h3>
         <p
@@ -58,20 +54,12 @@ const Profile = () => {
           </div>
         </div>
       </div>
-
-      
+    
       {!userData.subscriptionStatus && (
-        <button
-          className={styles.subscribeButton}
-          onClick={() => alert("Subscribe functionality coming soon!")}
-        >
-          Subscribe
-        </button>
-
+        <Button btnClass="secondary" label="Subscribe"
+          handleClick={() => alert("Subscribe functionality coming soon!")}
+        />
       )}
-       
-       
-
       
     </div>
   );
