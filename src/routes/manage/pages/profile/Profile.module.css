@@ -1,20 +1,19 @@
-.profilePage {
+  .profilePage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     padding: 20px;
-    max-width: 600px;
-    margin: 0 auto;
-    color: #fff;
+    gap: 1rem
   }
-  
+
   .profileHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
     text-align: center;
-  }
-  
-  .profileImage {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #7f00ff, #e100ff);
-    margin: 0 auto;
   }
   
   .address {
@@ -22,16 +21,15 @@
   }
   
   .profileStats {
-    margin-top: 20px;
-    border: 1px solid #444;
     border-radius: 8px;
     padding: 15px;
-    background-color: #222;
+    width: 600px;
+    max-width: 600px;
+    background-color: var(--secondary-bg);
   }
   
   .profileStats h3 {
     text-align: center;
-    margin-bottom: 10px;
   }
   
   .subscribed {
