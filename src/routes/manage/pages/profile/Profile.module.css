@@ -4,16 +4,29 @@
     justify-content: center;
     align-items: center;
     gap: 0.75rem;
-    padding-top: 6rem;
     text-align: center;
   }
-  
-  
+
+  h4 {
+      margin-left: 9rem;
+  }
+
   .profileStats {
-    border-radius: 8px;
-    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 10px;
     width: 600px;
     max-width: 600px;
+    padding: 2rem;
+    margin: 6rem auto;
+    gap: 2rem;
     background-color: var(--secondary-bg);
+    color: var(--primary-color);
   }
-    
+
+  .profileStats div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
