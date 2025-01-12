@@ -1,24 +1,13 @@
-  .profilePage {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    gap: 1rem
-  }
-
-  .profileHeader {
+  .profile {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 0.75rem;
+    padding-top: 6rem;
     text-align: center;
   }
   
-  .address {
-    color: #aaa;
-  }
   
   .profileStats {
     border-radius: 8px;
@@ -27,61 +16,4 @@
     max-width: 600px;
     background-color: var(--secondary-bg);
   }
-  
-  .profileStats h3 {
-    text-align: center;
-  }
-  
-  .subscribed {
-    text-align: center;
-    color: #0f0;
-  }
-  
-  .notSubscribed {
-    text-align: center;
-    color: #f00;
-  }
-  
-  .statsGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .statsGrid div {
-    text-align: center;
-  }
-  
-  .subscribeButton {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-top: 20px;
-    background-color: var(--primary-color);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .subscribeButton:hover {
-    background-color: rgb(104, 95, 240);
-  }
-
-  .editButton{
-    display: block;
-    padding: 10px;
-    margin-top: 20px;
-    background-color: var(--primary-color);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .editButton:hover{
-    background-color: rgb(104, 95, 240);
-  }
+    
