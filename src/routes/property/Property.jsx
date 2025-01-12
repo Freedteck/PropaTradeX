@@ -21,12 +21,10 @@ import { buyProperty } from "../../modules/buyProperty";
 import { rentProperty } from "../../modules/rentProperty";
 import MessageModal from "../../components/messageModal/MessageModal";
 import { toast, ToastContainer } from "react-toastify";
-import { consumeProtectedData } from "../../modules/consumeProtectedData";
 import {
   getCompletedTaskId,
   saveCompletedTaskId,
 } from "../../utils/localstorageContentMap";
-import StatusModal from "../../components/statusModal/StatusModal";
 import { initDataProtectorSDK } from "../../clients/dataProtectorClient";
 import ConsumeStatusModal from "../../components/consumeStatusModal/ConsumeStatusModal";
 
