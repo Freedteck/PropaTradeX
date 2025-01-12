@@ -17,7 +17,7 @@ export const getProtectedProperties = async (collectionIdArray, connector) => {
       const latestProtectedData = protectedDataInCollection.filter(
         (protectedData) => {
           return (
-            protectedData.creationTimestamp * 1000 >=
+            protectedData.creationTimestamp * 1000 >
             new Date(1736668255 * 1000).getTime()
           );
         }

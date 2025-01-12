@@ -41,8 +41,6 @@ const useFetchPropertyData = ({ protectedDataAddress }) => {
         thumbnail: ipfsFilesUrls[2],
       }));
 
-      console.log("Property data", propertyData);
-
       setProperty(propertyData[0]);
     } catch (err) {
       setError(err);

@@ -5,7 +5,6 @@ export const rentProperty = async (
   rentalParams,
   connector
 ) => {
-  console.log("Rent property", rentalParams);
 
   const { dataProtectorSharing } = await initDataProtectorSDK({ connector });
   return dataProtectorSharing.rentProtectedData({

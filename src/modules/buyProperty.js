@@ -7,8 +7,6 @@ export const buyProperty = async (
   connector,
   ownerAddress
 ) => {
-  console.log("Buy property", priceInRLC);
-
   const collectionId = await getOrCreateCollection({
     connector,
     ownerAddress: ownerAddress,
