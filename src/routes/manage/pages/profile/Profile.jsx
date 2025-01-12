@@ -13,9 +13,17 @@ const Profile = () => {
   return (
     <>
       <Hero header="My Profile"/>
-      <div className={styles.profile}>
-        <h1>{address || "Please Connect Wallet"}</h1>
-      {/*<Button label="Edit Profile" btnClass="primary" handleClick={() => navigate("/manage/profile/edit")} />*/}
+      <h4>{address || "Please Connect Wallet"}</h4>
+
+      <div className={styles.profileStats}>
+        <div>
+          <p>Balance: </p>
+          <p>Rentals: </p>
+        </div>
+        <div>
+          <p>Sales: </p>
+          <p>Total Listed Assets: </p>
+        </div>
       </div>
  
     </>
