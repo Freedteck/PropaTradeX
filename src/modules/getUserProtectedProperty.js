@@ -14,7 +14,7 @@ export const getUserProtectedProperties = async (ownerAddress, connector) => {
     (protectedData) => {
       return (
         protectedData.creationTimestamp * 1000 >
-        new Date(1736668255 * 1000).getTime()
+        new Date(1736707175 * 1000).getTime()
       );
     }
   );

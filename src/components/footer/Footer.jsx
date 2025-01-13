@@ -1,11 +1,16 @@
 // import { Github } from "lucide-react";
 import styles from "./Footer.module.css";
+import logo from "../../assets/logo.png";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
     <footer>
       <section className={styles.footer}>
-        <h1 className={styles.logo}>PropaTradeX</h1>
+        <Link to={"/"} className={styles.logo}>
+          <img src={logo} alt="logo" width={28} />
+          PropaTradeX
+        </Link>
         <p> © 2024 PropaTradeX. All rights reserved.</p>
       </section>
       {/* <a href="">

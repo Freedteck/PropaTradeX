@@ -6,6 +6,7 @@ import Button from "../button/Button";
 import { Lock, Moon, Sun } from "lucide-react";
 import { useContext, useEffect } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
+import logo from "../../assets/logo.png";
 
 const Header = ({ protectedDataAddress }) => {
   const { isConnected } = useAccount();
@@ -25,6 +26,7 @@ const Header = ({ protectedDataAddress }) => {
     <header>
       <nav className={styles["header-nav"]}>
         <Link to={"/"} className={styles.logo}>
+          <img src={logo} alt="logo" width={28} />
           PropaTradeX
         </Link>
         {isConnected && (

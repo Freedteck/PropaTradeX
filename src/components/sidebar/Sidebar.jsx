@@ -1,4 +1,4 @@
-import { LayoutDashboard, MessageSquareLock, Plus, User2 } from "lucide-react";
+import { LayoutDashboard, Plus, User2, UsersIcon } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Sidebar.module.css";
 import Button from "../button/Button";
@@ -25,11 +25,11 @@ const Sidebar = () => {
         </li>
         <li>
           <NavLink
-            to={"/manage/messages"}
+            to={"/manage/users"}
             className={({ isActive }) => (isActive ? styles.active : "")}
           >
-            <MessageSquareLock size={24} />
-            Messages
+            <UsersIcon size={24} />
+            All Users
           </NavLink>
         </li>
         <li>

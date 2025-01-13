@@ -23,6 +23,7 @@ const Explore = () => {
         );
 
         setProperties(protectedProperties);
+
         setIsPropertiesLoading(false);
       } else {
         setIsPropertiesLoading(false);

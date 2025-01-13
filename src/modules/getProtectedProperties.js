@@ -10,7 +10,7 @@ export const getProtectedProperties = async (collectionIdArray, connector) => {
       const { protectedDataInCollection } =
         await dataProtectorSharing.getProtectedDataInCollections({
           collectionId,
-          createdAfterTimestamp: 1736668255,
+          createdAfterTimestamp: 1736707175,
           isDistributed: true,
         });
 
@@ -18,7 +18,7 @@ export const getProtectedProperties = async (collectionIdArray, connector) => {
         (protectedData) => {
           return (
             protectedData.creationTimestamp * 1000 >
-            new Date(1736668255 * 1000).getTime()
+            new Date(1736707175 * 1000).getTime()
           );
         }
       );
@@ -77,9 +77,6 @@ export const getProtectedProperties = async (collectionIdArray, connector) => {
   //           new Date(1736035800 * 1000).getTime() &&
   //         property.address !== "0x43ebd3dc37cbaa8a341a76c87c591efbaa317be6"
   //     );
-
-  //   console.log("Filtered Properties:", filteredProperties);
-  console.log("Properties with IPFS:", protectedProperties.flat());
 
   return protectedProperties.flat();
 };
