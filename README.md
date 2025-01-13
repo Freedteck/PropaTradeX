@@ -1,5 +1,5 @@
 # PROPATRADEX
-"Secure, Smart, Seamless Property Transactions"
+_Secure, Smart, Seamless Property Transactions_
 
 ## Project Description  
 **PROPATRADEX** is a blockchain-integrated real estate platform designed to revolutionize property transactions. Built using the iExec platform, it offers a secure, transparent, and efficient environment for users to buy or rent properties. By leveraging Web3 technology, PROPATRADEX enhances privacy, decentralization, and user functionality in real estate transactions.
