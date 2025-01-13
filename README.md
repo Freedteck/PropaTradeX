@@ -34,7 +34,7 @@
 ## Installation  
 1. Clone the repository:  
    ```bash  
-   git clone https://github.com/freedTech/propatradex.git  
+   git clone https://github.com/Freedteck/PropaTradeX.git  
    cd propatradex  
    ```  
 2. Install dependencies:  
@@ -42,11 +42,11 @@
    npm install  
    ```  
 3. Configure the environment variables:  
-   - Add your **iExec API key**, **Pinata API key**, and other configurations to `.env`.  
+   - Add your **iExec API key**, **Pinata API key**, and other configurations to `.env.local`.  
 
 4. Start the development server:  
    ```bash  
-   npm start  
+   npm run dev  
    ```  
 
 ---
@@ -60,9 +60,9 @@
 ---
 
 ## Team Members  
-1. **[Olanrewaju Mubarak]** - Lead Frontend Developer  
-2. **[Falasinnu Funmilayo]** - Project Manager  
-3. **[Opeyemi Oalekan]** - Frontend Developer  
+1. **[Olanrewaju Mubarak]** - FullStack Developer  
+2. **[Funmilayo Esther]** - Product Manager  
+3. **[Opeyemi Olalekan]** - Frontend Developer  
 4. **[Akanji Abdulkudus]** - Frontend Developer  
 
 ---
